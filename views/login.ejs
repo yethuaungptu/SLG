@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ./partial/navbar.ejs %>
+    <div class="hero bg-accent min-h-screen">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Login For Eco System</h1>
+          <p class="py-6">
+            Some information about the login process and what users can expect
+            after logging in. This could include benefits, features, or any
+            other relevant details that would encourage users to complete the
+            login.
+          </p>
+        </div>
+        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <div class="card-body">
+            <fieldset class="fieldset">
+              <label class="label">Email</label>
+              <input type="email" class="input" placeholder="Email" />
+              <label class="label">Password</label>
+              <input type="password" class="input" placeholder="Password" />
+              <button class="btn btn-neutral mt-4">Login</button>
+            </fieldset>
+            <div class="text-center">
+              <a href="/register" class="link link-hover"
+                >Don't have account? Register here</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

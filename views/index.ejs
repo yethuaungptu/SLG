@@ -1,11 +1,237 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="mytheme">
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <% include ./partial/navbar.ejs %>
+    <div class="carousel w-full h-[50vh] lg:h-[80vh]">
+      <div id="slide1" class="carousel-item relative w-full">
+        <img src="/images/slider-1.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
+            Protect Our Planet
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
+            Join our mission to create a sustainable and eco-friendly future.
+          </p>
+          <a href="#contact" class="btn btn-primary">Get Involved</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+
+      <!-- Repeat for other slides with different text -->
+      <div id="slide2" class="carousel-item relative w-full">
+        <img src="/images/slider-2.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
+            Clean Energy for All
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
+            Supporting solar and wind solutions worldwide.
+          </p>
+          <a href="#projects" class="btn btn-primary">Explore Projects</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+      <div id="slide3" class="carousel-item relative w-full">
+        <img src="/images/slider-3.jpg" class="w-full object-cover" />
+        <div
+          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
+        >
+          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
+            Recycle and Reuse
+          </h2>
+          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
+            Supporting recycling initiatives to reduce waste.
+          </p>
+          <a href="#projects" class="btn btn-primary">Explore Projects</a>
+        </div>
+        <div
+          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+        >
+          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
+            >❮</a
+          >
+          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
+            >❯</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="aos-all w-full">
+      <br />
+      <br />
+      <br />
+      <div data-id="1" class="aos-item mt-5" data-aos="fade-up">
+        <div class="text-4xl font-bold text-center">Featured Tips</div>
+        <div class="row">
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
+          >
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <div data-id="2" class="aos-item mt-5" data-aos="fade-up">
+        <div class="text-4xl font-bold text-center">Featured Challenges</div>
+        <div class="row">
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
+          >
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="card bg-base-100 w-96 shadow-sm">
+              <figure class="px-10 pt-10">
+                <img
+                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+              </figure>
+              <div class="card-body items-center text-center">
+                <h2 class="card-title">Card Title</h2>
+                <p>
+                  A card component has a figure, a body part, and inside body
+                  there are title and actions parts
+                </p>
+                <div class="card-actions">
+                  <button class="btn btn-primary">Buy Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
   </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
 </html>
