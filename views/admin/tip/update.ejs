@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide Admin</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
+            <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
+              <div class="text-xl font-semibold">Sustainable Tip Update</div>
+              <div class="divider mt-2"></div>
+              <div class="h-full w-full pb-6 bg-base-100">
+                <form
+                  action="/admin/tips/update"
+                  method="post"
+                  enctype="multipart/form-data"
+                >
+                <input type="hidden" name="id" value="<%= tip._id %>" />
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control w-full undefined -mb-7">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Title
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        value = "<%= tip.title %>"
+                        class="input input-bordered w-full validator"
+                        required
+                        minlength="3"
+                        title="Only letters, numbers or dash"
+                      />
+                      <p class="validator-hint">
+                        Must be at least 3 characters
+                      </p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Category
+                        </span>
+                      </label>
+                      <br />
+                      <select
+                        class="select validator w-full"
+                        name="category"
+                        required
+                      >
+                        <option value="Energy" <%= tip.category == "Energy" ? "selected":"" %>>Energy</option>
+                        <option value="Waste" <%= tip.category == "Waste" ? "selected":"" %>>Waste</option>
+                        <option value="Water" <%= tip.category == "Water" ? "selected":"" %>>Water</option>
+                        <option value="Food" <%= tip.category == "Food" ? "selected":"" %>>Food</option>
+                        <option value="Transport" <%= tip.category == "Transport" ? "selected":"" %>>Transport</option>
+                        <option value="Eco-Friendly" <%= tip.category == "Eco-Friendly" ? "selected":"" %>>Eco-Friendly</option>
+                      </select>
+                      <p class="validator-hint">Category is required</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Impact Level
+                        </span>
+                      </label>
+                      <br />
+                      <select
+                        class="select validator w-full"
+                        name="impact_level"
+                        required
+                      >
+                        <option value="Low" <%= tip.impact_level == "Low" ? "selected":"" %>>Low</option>
+                        <option value="Medium" <%= tip.impact_level == "Medium" ? "selected":"" %>>Medium</option>
+                        <option value="High" <%= tip.impact_level == "High" ? "selected":"" %>>High</option>
+                      </select>
+                      <p class="validator-hint">Impact Level is required</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Difficulty Level
+                        </span>
+                      </label>
+                      <br />
+                      <select
+                        class="select validator w-full"
+                        name="difficulty_level"
+                        required
+                      >
+                        <option value="Easy" <%= tip.difficulty_level == "Easy" ? "selected":"" %>>Easy</option>
+                        <option value="Normal" <%= tip.difficulty_level == "Normal" ? "selected":"" %>>Normal</option>
+                        <option value="Hard" <%= tip.difficulty_level == "Hard" ? "selected":"" %>>Hard</option>
+                      </select>
+                      <p class="validator-hint">Difficulty Level is required</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-7">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Estimated Savings
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        name="estimated_savings"
+                        value="<%= tip.estimated_savings %>"
+                        class="input input-bordered w-full validator"
+                        required
+                        minlength="3"
+                        title="Only letters, numbers or dash"
+                      />
+                      <p class="validator-hint">
+                        Must be at least 3 characters
+                      </p>
+                    </div>
+                    <div class="form-control w-full undefined">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Image
+                        </span>
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        placeholder="Estimated Savings"
+                        class="file-input input-bordered w-full"
+                      />
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Description
+                        </span>
+                      </label>
+                      <textarea
+                        name="description"
+                        class="textarea textarea-bordered w-full validator"
+                        required
+                        minlength="15"
+                      ><%= tip.description %></textarea>
+                      <p class="validator-hint">
+                        Must be at least 15 characters
+                      </p>
+                    </div>
+                  </div>
+                  <div class="divider"></div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="w-full undefined">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Steps
+                        </span>
+                      </label>
+                      <div id="steps-container" class="space-y-4"></div>
+
+                      <button
+                        type="button"
+                        class="btn btn-secondary mt-2"
+                        onclick="addStep()"
+                      >
+                        Add Step
+                      </button>
+                    </div>
+                    <div class="form-control w-full undefined">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Daily Habits
+                        </span>
+                      </label>
+                      <div id="habits-container" class="space-y-4"></div>
+
+                      <button
+                        type="button"
+                        class="btn btn-info mt-2"
+                        onclick="addHabit()"
+                      >
+                        Add Habit
+                      </button>
+                    </div>
+                  </div>
+                  <div class="mt-16">
+                    <button type="submit" class="btn btn-primary float-right">
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="h-16"></div>
+          </main>
+        </div>
+        <% include ../../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    let stepCount = 0;
+    let habitCount = 0;
+
+    $(function () {
+      // Initialize steps and habits if they exist
+      const steps = <%- JSON.stringify(tip.steps || []) %>;
+      const habits = <%- JSON.stringify(tip.daily_habits || []) %>;
+
+      steps.forEach((step, index) => {
+        addStep();
+        const stepDiv = document.querySelector(`[data-step-id="${index}"]`);
+        stepDiv.querySelector('input[name^="steps"]').value = step.number;
+        stepDiv.querySelector('input[name$="[description]"]').value =
+          step.description;
+      });
+
+      habits.forEach((habit, index) => {
+        addHabit();
+        const habitDiv = document.querySelector(`[data-habit-id="${index}"]`);
+        habitDiv.querySelector('input[name^="habits"]').value = habit.title;
+        habitDiv.querySelector('input[name$="[frequency]"]').value =
+          habit.frequency;
+      });
+    });
+
+    function addStep() {
+      const container = document.getElementById("steps-container");
+
+      const stepDiv = document.createElement("div");
+      stepDiv.className = "border p-4 rounded bg-base-200 relative";
+      stepDiv.setAttribute("data-step-id", stepCount);
+
+      stepDiv.innerHTML = `
+      <label class="label">Step Number</label>
+      <input type="number" name="steps[${stepCount}][number]" class="input input-bordered w-full mb-2" placeholder="Step Number" required />
+
+      <label class="label">Description</label>
+      <input type="text" name="steps[${stepCount}][description]" class="input input-bordered w-full" placeholder="Step Description" required />
+
+      <button type="button" class="btn btn-error btn-sm mt-3" onclick="removeStep(${stepCount})">Remove Step</button>
+    `;
+      container.appendChild(stepDiv);
+      stepCount++;
+    }
+
+    function addHabit() {
+      const container = document.getElementById("habits-container");
+
+      const habitDiv = document.createElement("div");
+      habitDiv.className = "border p-4 rounded bg-base-200 relative";
+      habitDiv.setAttribute("data-habit-id", habitCount);
+
+      habitDiv.innerHTML = `
+      <label class="label">Title</label>
+      <input type="text" name="habits[${habitCount}][title]" class="input input-bordered w-full mb-2" placeholder="Habit Title" required />
+
+      <label class="label">Frequency</label>
+      <input type="text" name="habits[${habitCount}][frequency]" class="input input-bordered w-full" placeholder="Habit Frequency" required />
+
+      <button type="button" class="btn btn-error btn-sm mt-3" onclick="removeHabit(${habitCount})">Remove Habit</button>
+    `;
+      container.appendChild(habitDiv);
+      habitCount++;
+    }
+
+    function removeStep(id) {
+      const stepDiv = document.querySelector(`[data-step-id="${id}"]`);
+      if (stepDiv) {
+        stepDiv.remove();
+      }
+    }
+
+    function removeHabit(id) {
+      const habitDiv = document.querySelector(`[data-habit-id="${id}"]`);
+      if (habitDiv) {
+        habitDiv.remove();
+      }
+    }
+  </script>
+</html>

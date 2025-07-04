@@ -9,12 +9,17 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.11",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "express-session": "^1.18.1",
     "http-errors": "~1.6.3",
+    "moment-timezone": "^0.6.0",
+    "mongoose": "^8.16.1",
     "morgan": "~1.9.1",
+    "multer": "^2.0.1",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

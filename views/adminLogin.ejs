@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ./partial/navbar.ejs %>
+    <div class="hero bg-accent min-h-screen">
+      <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="text-center lg:text-left">
+          <h1 class="text-5xl font-bold">Login For Admin Panel</h1>
+          <p class="py-6">
+            Administrators can manage the entire system, including user
+            accounts, content moderation, and system settings. This login page
+            is designed for administrators to access the admin panel securely.
+          </p>
+        </div>
+        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <div class="card-body">
+            <% if (error) { %>
+            <div role="alert" class="alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Error! <%= error %></span>
+            </div>
+            <%} %>
+            <fieldset class="fieldset">
+              <form action="/adminLogin" method="post">
+                <label class="label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  class="input"
+                  placeholder="Email"
+                />
+                <label class="label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  class="input"
+                  placeholder="Password"
+                />
+                <button class="btn btn-neutral mt-4" type="submit">
+                  Login
+                </button>
+              </form>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+</html>

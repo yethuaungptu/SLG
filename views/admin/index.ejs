@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide Admin</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
+            <div class="hero h-4/5 bg-base-200">
+              <div class="hero-content">
+                <div class="max-w-md">
+                  <h1 class="text-2xl mt-8 font-bold">
+                    Admin Dashboard Starter Kit
+                  </h1>
+                  <p class="py-2 mt-4">
+                    ✓ <span class="font-semibold">Light/dark</span> mode toggle
+                  </p>
+                  <p class="py-2">
+                    ✓ <span class="font-semibold">Redux toolkit</span> and other
+                    utility libraries configured
+                  </p>
+                  <p class="py-2">
+                    ✓
+                    <span class="font-semibold">Calendar, Modal, Sidebar </span>
+                    components
+                  </p>
+                  <p class="py-2">
+                    ✓ User-friendly
+                    <span class="font-semibold">documentation</span>
+                  </p>
+                  <p class="py-2 mb-4">
+                    ✓ <span class="font-semibold">Daisy UI</span> components,
+                    <span class="font-semibold">Tailwind CSS</span> support
+                  </p>
+                  <a href="/app/dashboard"
+                    ><button class="btn bg-base-100 btn-outline">
+                      Get Started
+                    </button></a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="h-16"></div>
+          </main>
+        </div>
+        <% include ../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+</html>

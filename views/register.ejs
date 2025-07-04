@@ -3,7 +3,6 @@
   <head>
     <title>Sustainable Living Guide</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/aos.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -23,13 +22,47 @@
         <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div class="card-body">
             <fieldset class="fieldset">
-              <label class="label">Name</label>
-              <input type="text" class="input" placeholder="Name" />
-              <label class="label">Email</label>
-              <input type="email" class="input" placeholder="Email" />
-              <label class="label">Password</label>
-              <input type="password" class="input" placeholder="Password" />
-              <button class="btn btn-neutral mt-4">Register</button>
+              <form action="" method="post">
+                <label class="label">Name</label>
+                <input
+                  type="text"
+                  class="input validator"
+                  required
+                  placeholder="Name"
+                  pattern="[A-Za-z][A-Za-z\- ]*"
+                  minlength="3"
+                  maxlength="30"
+                  title="Only letters"
+                />
+                <p class="validator-hint -mt-1">Must be 3 to 30 characters</p>
+                <label class="label">Email</label>
+                <input
+                  type="email"
+                  class="input validator"
+                  required
+                  placeholder="Email"
+                />
+                <div class="validator-hint -mt-1">
+                  Enter valid email address
+                </div>
+                <label class="label">Password</label>
+                <input
+                  type="password"
+                  class="input validator"
+                  placeholder="Password"
+                  required
+                  minlength="8"
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+                />
+                <p class="validator-hint -mt-1">
+                  Must be more than 8 characters, including at least one
+                  number,one lowercase letter and one uppercase letter
+                </p>
+                <button class="btn btn-neutral btn-wide flex" type="submit">
+                  Register
+                </button>
+              </form>
             </fieldset>
             <div class="text-center">
               <a href="/login" class="link link-hover"
@@ -42,10 +75,26 @@
     </div>
     <% include ./partial/footer.ejs %>
   </body>
-  <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
-    AOS.init({
-      mirror: true,
+    $("form").submit(function (event) {
+      event.preventDefault();
+      const name = $(".input").eq(0).val();
+      const email = $(".input").eq(1).val();
+      const password = $(".input").eq(2).val();
+
+      const data = { name, email, password };
+      $.ajax("/register", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.href = "/login";
+          }
+        },
+      });
     });
   </script>
 </html>

@@ -96,63 +96,40 @@
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
           >
+            <% if (featuredTips.length === 0) { %>
+            <div class="text-center col-span-3 mt-3">
+              <p class="text-lg font-semibold">No featured tips available.</p>
+            </div>
+            <%} %> <% for(var i = 0; i < featuredTips.length;i++){%>
             <div class="card bg-base-100 w-96 shadow-sm">
               <figure class="px-10 pt-10">
+                <% if (featuredTips[i].image) { %>
+                <img
+                  src="<%= featuredTips[i].image %>"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+                <%} else{%>
                 <img
                   src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                   alt="Shoes"
                   class="rounded-xl"
                 />
+                <%}%>
               </figure>
               <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
+                <h2 class="card-title"><%= featuredTips[i].title %></h2>
+                <p><%= featuredTips[i].description %></p>
                 <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
+                  <a
+                    class="btn btn-primary"
+                    href="/tips/<%= featuredTips[i]._id %>"
+                    >More Details</a
+                  >
                 </div>
               </div>
             </div>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
-                <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
-                </div>
-              </div>
-            </div>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
-                <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
-                </div>
-              </div>
-            </div>
+            <%}%>
           </div>
         </div>
       </div>

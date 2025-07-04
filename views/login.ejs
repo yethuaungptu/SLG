@@ -3,7 +3,6 @@
   <head>
     <title>Sustainable Living Guide</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/aos.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
@@ -27,7 +26,7 @@
               <input type="email" class="input" placeholder="Email" />
               <label class="label">Password</label>
               <input type="password" class="input" placeholder="Password" />
-              <button class="btn btn-neutral mt-4">Login</button>
+              <button class="btn btn-neutral mt-4" id="loginBtn">Login</button>
             </fieldset>
             <div class="text-center">
               <a href="/register" class="link link-hover"
@@ -40,10 +39,29 @@
     </div>
     <% include ./partial/footer.ejs %>
   </body>
-  <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
-    AOS.init({
-      mirror: true,
+    $("#loginBtn").click(function () {
+      const email = $(".input").eq(0).val();
+      const password = $(".input").eq(1).val();
+
+      if (email == "" || password == "") {
+        alert("Please fill all fields");
+        return;
+      }
+
+      const data = { email, password };
+      $.ajax("/login", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.href = "/user";
+          }
+        },
+      });
     });
   </script>
 </html>
