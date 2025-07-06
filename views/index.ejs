@@ -136,69 +136,48 @@
       <br />
       <br />
       <br />
-      <div data-id="2" class="aos-item mt-5" data-aos="fade-up">
+      <div data-id="2" class="aos-item my-5" data-aos="fade-up">
         <div class="text-4xl font-bold text-center">Featured Challenges</div>
         <div class="row">
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
           >
+            <% if (featuredChallenges.length === 0) { %>
+            <div class="text-center col-span-3 mt-3">
+              <p class="text-lg font-semibold">
+                No featured challenge available.
+              </p>
+            </div>
+            <%} %> <% for(var i = 0; i < featuredChallenges.length;i++){%>
             <div class="card bg-base-100 w-96 shadow-sm">
               <figure class="px-10 pt-10">
+                <% if (featuredChallenges[i].image) { %>
+                <img
+                  src="<%= featuredChallenges[i].image %>"
+                  alt="Shoes"
+                  class="rounded-xl"
+                />
+                <%} else{%>
                 <img
                   src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                   alt="Shoes"
                   class="rounded-xl"
                 />
+                <%}%>
               </figure>
               <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
+                <h2 class="card-title"><%= featuredChallenges[i].name %></h2>
+                <p><%= featuredChallenges[i].description %></p>
                 <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
+                  <a
+                    class="btn btn-primary"
+                    href="/challenges/<%= featuredChallenges[i]._id %>"
+                    >More Details</a
+                  >
                 </div>
               </div>
             </div>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
-                <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
-                </div>
-              </div>
-            </div>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title">Card Title</h2>
-                <p>
-                  A card component has a figure, a body part, and inside body
-                  there are title and actions parts
-                </p>
-                <div class="card-actions">
-                  <button class="btn btn-primary">Buy Now</button>
-                </div>
-              </div>
-            </div>
+            <%}%>
           </div>
         </div>
       </div>

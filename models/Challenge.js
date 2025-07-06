@@ -3,15 +3,27 @@ const Schema = mongoose.Schema;
 var moment = require("moment-timezone");
 
 const dailyTaskSchema = new Schema({
-  day: Number,
-  title: String,
-  description: String,
+  day: {
+    type: Number,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
   completedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const participantSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User" },
-  currentDay: Number,
+  currentDay: {
+    type: Number,
+    required: true,
+  },
   completedDays: [Number],
   status: {
     type: String,
@@ -45,12 +57,16 @@ const ChallengeSchema = new Schema({
     type: String,
     required: true,
   },
-  points: {
+  point: {
     type: Number,
     required: true,
   },
   image: {
     type: String,
+  },
+  benefit: {
+    type: String,
+    required: true,
   },
   isFeatured: {
     type: Boolean,

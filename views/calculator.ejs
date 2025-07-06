@@ -9,7 +9,48 @@
   </head>
   <body>
     <% include ./partial/navbar.ejs %>
-    <h1 class="text-2xl text-center"><%= title %></h1>
+    <div class="flex items-center justify-center min-h-screen bg-green-200">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8">
+      <h1 class="text-3xl font-bold text-center text-green-700 mb-6">🌱 Eco Footprint Calculator</h1>
+      <form id="ecoForm" class="space-y-5">
+
+        <div class="form-control">
+          <label class="label font-medium">Electricity Usage (kWh/month)</label>
+          <input id="electricity" type="number" placeholder="e.g. 400" class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+          <label class="label font-medium">Car Travel (km/week)</label>
+          <input id="carKm" type="number" placeholder="e.g. 150" class="input input-bordered w-full" />
+        </div>
+
+        <div class="form-control">
+          <label class="label font-medium">Public Transport Frequency</label>
+          <select id="publicTransport" class="select select-bordered w-full">
+            <option value="0">Never</option>
+            <option value="0.1">Sometimes</option>
+            <option value="0.2">Often</option>
+            <option value="0.3">Always</option>
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label font-medium">Diet Type</label>
+          <select id="diet" class="select select-bordered w-full">
+            <option value="2.5">Meat-heavy</option>
+            <option value="1.8">Mixed</option>
+            <option value="1.2">Vegetarian</option>
+            <option value="0.9">Vegan</option>
+          </select>
+        </div>
+
+        <div class="mt-6 bg-green-50 p-4 rounded-xl shadow-inner text-center">
+          <h2 class="text-xl font-semibold text-green-700">Estimated CO₂ Footprint:</h2>
+          <p id="result" class="text-3xl font-bold text-gray-800 mt-2">0.00 kg/month</p>
+        </div>
+      </form>
+    </div>
+    </div>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>
@@ -17,5 +58,33 @@
     AOS.init({
       mirror: true,
     });
+    const electricityInput = document.getElementById('electricity');
+      const carKmInput = document.getElementById('carKm');
+      const publicTransportInput = document.getElementById('publicTransport');
+      const dietInput = document.getElementById('diet');
+      const resultDisplay = document.getElementById('result');
+
+      function calculateFootprint() {
+        const electricity = parseFloat(electricityInput.value) || 0;
+        const carKm = parseFloat(carKmInput.value) || 0;
+        const publicTransport = parseFloat(publicTransportInput.value) || 0;
+        const dietFactor = parseFloat(dietInput.value) || 0;
+
+        // Example conversion factors (can be customized)
+        const electricityCO2 = electricity * 0.5; // kg CO2 per kWh
+        const carCO2 = carKm * 0.21 * 4; // kg CO2 per km * 4 weeks
+        const publicTransportCO2 = 30 * publicTransport; // kg/month offset
+        const dietCO2 = dietFactor * 30; // kg/month
+
+        const total = (electricityCO2 + carCO2 + dietCO2) - publicTransportCO2;
+
+        resultDisplay.textContent = `${total.toFixed(2)} kg/month`;
+      }
+
+      [electricityInput, carKmInput, publicTransportInput, dietInput].forEach(input => {
+        input.addEventListener('input', calculateFootprint);
+        input.addEventListener('change', calculateFootprint);
+      });
+    </script>
   </script>
 </html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide Admin</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
+            <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
+              <div class="text-xl font-semibold">Eco Challenge Create</div>
+              <div class="divider mt-2"></div>
+              <div class="h-full w-full pb-6 bg-base-100">
+                <form
+                  action="/admin/challenges/create"
+                  method="post"
+                  enctype="multipart/form-data"
+                >
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control w-full undefined -mb-7">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Name
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        class="input input-bordered w-full validator"
+                        required
+                        minlength="3"
+                        title="Only letters, numbers or dash"
+                      />
+                      <p class="validator-hint">
+                        Must be at least 3 characters
+                      </p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Category
+                        </span>
+                      </label>
+                      <br />
+                      <select
+                        class="select validator w-full"
+                        name="category"
+                        required
+                      >
+                        <option value="Plastic Reduction">
+                          Plastic Reduction
+                        </option>
+                        <option value="Recycling & Waste">
+                          Recycling & Waste
+                        </option>
+                        <option value="Sustainable Food">
+                          Sustainable Food
+                        </option>
+                        <option value="Water Conservation">
+                          Water Conservation
+                        </option>
+                        <option value="Energy Saving">Energy Saving</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Eco-Friendly Products">
+                          Eco-Friendly Products
+                        </option>
+                        <option value="Minimalism">Minimalism</option>
+                        <option value="Nature Connection">
+                          Nature Connection
+                        </option>
+                        <option value="Green Tech">Green Tech</option>
+                        <option value="Clothing & Fashion">
+                          Clothing & Fashion
+                        </option>
+                        <option value="Community Action">
+                          Community Action
+                        </option>
+                        <option value="Digital Minimalism">
+                          Digital Minimalism
+                        </option>
+                        <option value="Climate Education">
+                          Climate Education
+                        </option>
+                        <option value="DIY & Reuse">DIY & Reuse</option>
+                      </select>
+                      <p class="validator-hint">Category is required</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-7">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Point
+                        </span>
+                      </label>
+                      <input
+                        type="number"
+                        name="point"
+                        placeholder="Challenge Point"
+                        class="input input-bordered w-full validator"
+                        required
+                        min="1"
+                        title="Only letters"
+                      />
+                      <p class="validator-hint">
+                        Only number and at least one point
+                      </p>
+                    </div>
+
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Difficulty
+                        </span>
+                      </label>
+                      <br />
+                      <select
+                        class="select validator w-full"
+                        name="difficulty"
+                        required
+                      >
+                        <option value="Easy">Easy</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Hard">Hard</option>
+                      </select>
+                      <p class="validator-hint">Difficulty is required</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Start Date
+                        </span>
+                      </label>
+                      <br />
+                      <input
+                        type="date"
+                        id="startDate"
+                        class="w-full input validator"
+                        name="startDate"
+                        required
+                        placeholder="Pick a start date"
+                        title="Must be valid date"
+                      />
+                      <p class="validator-hint">Please select start date</p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          End Date
+                        </span>
+                      </label>
+                      <br />
+                      <input
+                        type="date"
+                        class="w-full input validator"
+                        name="endDate"
+                        id="endDate"
+                        required
+                        placeholder="Pick a end date"
+                        title="Must be valid date"
+                      />
+                      <p class="validator-hint">Please select end date</p>
+                    </div>
+                    <div class="form-control w-full undefined">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Image
+                        </span>
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        placeholder="Estimated Savings"
+                        class="file-input input-bordered w-full"
+                      />
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Description
+                        </span>
+                      </label>
+                      <textarea
+                        name="description"
+                        class="textarea textarea-bordered w-full validator"
+                        required
+                        minlength="15"
+                      ></textarea>
+                      <p class="validator-hint">
+                        Must be at least 15 characters
+                      </p>
+                    </div>
+                    <div class="form-control w-full undefined -mb-3">
+                      <label class="label">
+                        <span class="label-text text-base-content undefined">
+                          Benefit
+                        </span>
+                      </label>
+                      <textarea
+                        name="benefit"
+                        class="textarea textarea-bordered w-full validator"
+                        required
+                        minlength="15"
+                      ></textarea>
+                      <p class="validator-hint">
+                        Must be at least 15 characters
+                      </p>
+                    </div>
+                  </div>
+                  <div class="divider"></div>
+                  <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    id="dailyTask"
+                  ></div>
+                  <div class="mt-16">
+                    <button type="submit" class="btn btn-primary float-right">
+                      Add
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="h-16"></div>
+          </main>
+        </div>
+        <% include ../../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    $("#startDate").change(() => {
+      calculateDate();
+    });
+    $("#endDate").change(() => {
+      calculateDate();
+    });
+    function calculateDate() {
+      var totalDay = 0;
+      const start = new Date($("#startDate").val());
+      const end = new Date($("#endDate").val());
+      const current = start;
+      if (start > end) {
+        alert("Invalid date reselect dates");
+        $("#startDate").val("");
+        $("#endDate").val("");
+      } else {
+        while (current <= end) {
+          totalDay++;
+          current.setDate(current.getDate() + 1);
+        }
+      }
+      const container = document.getElementById("dailyTask");
+      container.innerHTML = "";
+      for (var i = 0; i < totalDay; i++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.className = "border p-4 rounded bg-base-200 relative";
+        dayDiv.setAttribute("data-day-id", i);
+
+        dayDiv.innerHTML = `
+       <label class="label">Day</label>
+       <input type="number" name="dailyTasks[${i}][day]" class="input input-bordered w-full mb-2" value="${
+          i + 1
+        }" readonly required />
+
+      <label class="label">Title</label>
+      <input type="text" name="dailyTasks[${i}][title]" class="input input-bordered w-full mb-2" placeholder="Title" required />
+
+      <label class="label">Description</label>
+      <input type="text" name="dailyTasks[${i}][description]" class="input input-bordered w-full" placeholder="Description" required />
+    `;
+        container.appendChild(dayDiv);
+      }
+      console.log(totalDay);
+    }
+  </script>
+</html>

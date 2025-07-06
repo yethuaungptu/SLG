@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require("../models/User");
 var Tip = require("../models/Tip");
+var Challenge = require("../models/Challenge");
 
 /* GET home page. */
 
@@ -71,7 +72,14 @@ router.post("/adminLogin", (req, res) => {
 
 router.get("/", async (req, res, next) => {
   const featuredTips = await Tip.find({ isFeatured: true, isDeleted: false });
-  res.render("index", { featuredTips: featuredTips });
+  const featuredChallenges = await Challenge.find({
+    isFeatured: true,
+    isDeleted: false,
+  });
+  res.render("index", {
+    featuredTips: featuredTips,
+    featuredChallenges: featuredChallenges,
+  });
 });
 
 router.get("/tips", async (req, res, next) => {
@@ -87,8 +95,20 @@ router.get("/tips/:id", async function (req, res) {
   res.render("tipDetail", { title: "Sustainable Tip Detail", tip: tip });
 });
 
-router.get("/challenges", (req, res, next) => {
-  res.render("challenges", { title: "Eco Challenges" });
+router.get("/challenges", async (req, res, next) => {
+  const challenges = await Challenge.find({ isDeleted: false }).sort({
+    created: -1,
+    isFeatured: 1,
+  });
+  res.render("challenges", { title: "Eco Challenges", challenges: challenges });
+});
+
+router.get("/challenges/:id", async (req, res, next) => {
+  const challenge = await Challenge.findById(req.params.id);
+  res.render("challengeDetail", {
+    title: "Eco Challenges",
+    challenge: challenge,
+  });
 });
 
 router.get("/calculator", (req, res, next) => {
