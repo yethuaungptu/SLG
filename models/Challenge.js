@@ -89,4 +89,37 @@ const ChallengeSchema = new Schema({
   },
 });
 
+ChallengeSchema.virtual("updated_startDate").get(function () {
+  return moment.tz(this.startDate, "YYYY MM DD").format().split("T")[0];
+});
+
+ChallengeSchema.virtual("updated_endDate").get(function () {
+  return moment.tz(this.endDate, "YYYY MM DD").format().split("T")[0];
+});
+
+ChallengeSchema.virtual("status").get(function () {
+  const currentDate = new Date();
+  const startDate = new Date(this.startDate); // Example start date
+  const endDate = new Date(this.endDate);
+  if (currentDate >= startDate && currentDate <= endDate) {
+    return "ongoing";
+  } else if (currentDate < startDate) {
+    return "not start";
+  } else {
+    return "finished";
+  }
+});
+
+ChallengeSchema.virtual("currentDay").get(function () {
+  const currentDate = new Date();
+  const startDate = new Date(this.startDate); // Example start date
+  const endDate = new Date(this.endDate);
+  if (currentDate >= endDate) return this.dailyTasks.length;
+  if (currentDate >= startDate && currentDate <= endDate) {
+    return currentDate.getDate() - startDate.getDate() + 1;
+  } else if (currentDate < startDate) {
+    return 0;
+  }
+});
+
 module.exports = mongoose.model("Challenge", ChallengeSchema);

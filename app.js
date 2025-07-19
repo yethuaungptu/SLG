@@ -34,6 +34,12 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.locals.user = req.session.user;
+  res.locals.admin = req.session.admin;
+  next();
+});
+
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);

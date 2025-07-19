@@ -29,6 +29,9 @@
         <li><a href="/blogs">Blog</a></li>
         <li><a href="/community">Community</a></li>
         <li><a href="/aboutus">About Us</a></li>
+        <% if(locals.user){%>
+        <li><a href="/user">User Panel</a></li>
+        <%}%>
       </ul>
       <a class="btn btn-ghost btn-primary text-xl hidden lg:flex"
         >Sustainable Living Guide</a
@@ -44,11 +47,20 @@
       <li><a href="/blogs">Blog</a></li>
       <li><a href="/community">Community</a></li>
       <li><a href="/aboutus">About Us</a></li>
+      <% if(locals.user){%>
+      <li><a href="/user">User Panel</a></li>
+      <%}%>
     </ul>
   </div>
   <div class="navbar-end">
-    <a href="/login" class="btn btn-outline btn-ghost btn-primary"
-      >Login / Register</a
-    >
+    <% if(locals.user){%>
+    <a href="/user/logout" class="btn btn-outline btn-ghost btn-primary">
+      Logout
+    </a>
+    <%}else{%>
+    <a href="/login" class="btn btn-outline btn-ghost btn-primary">
+      Login / Register
+    </a>
+    <%}%>
   </div>
 </div>

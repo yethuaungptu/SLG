@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide Admin</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
+            <div class="card w-full p-6 bg-base-100 shadow-xl mt-2">
+              <div class="text-xl font-semibold inline-block">
+                Blogs
+                <div class="inline-block float-right">
+                  <div class="inline-block float-right">
+                    <div class="inline-block mr-4">
+                      <div><%= filterValue %></div>
+                    </div>
+                    <div class="dropdown dropdown-bottom dropdown-end">
+                      <label tabindex="0" class="btn btn-sm btn-outline"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                          class="w-5 mr-2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                          ></path>
+                        </svg>
+                        Filter by Category
+                      </label>
+                      <ul
+                        tabindex="0"
+                        class="dropdown-content menu p-2 text-sm shadow bg-base-100 rounded-box w-52"
+                      >
+                        <li><a href="/admin/blog?search=Energy">Energy</a></li>
+                        <li><a href="/admin/blog?search=Waste">Waste</a></li>
+                        <li><a href="/admin/blog?search=Water">Water</a></li>
+                        <li><a href="/admin/blog?search=Food">Food</a></li>
+                        <li>
+                          <a href="/admin/blog?search=Transport">Transport</a>
+                        </li>
+                        <li>
+                          <a href="/admin/blog?search=Eco-Friendly"
+                            >Eco-Friendly</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="divider mt-2"></div>
+              <div class="h-full w-full pb-6 bg-base-100">
+                <div class="overflow-x-auto w-full">
+                  <table class="table w-full">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Views</th>
+                        <th>Likes</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (var i = 0; i < blogs.length; i++) { %>
+                      <tr>
+                        <td>
+                          <div class="flex items-center space-x-3">
+                            <div class="avatar">
+                              <div class="mask mask-circle w-12 h-12">
+                                <img src="<%= blogs[i].image %>" alt="Avatar" />
+                              </div>
+                            </div>
+                            <div>
+                              <div class="font-bold"><%= blogs[i].title %></div>
+                            </div>
+                          </div>
+                        </td>
+                        <td><%= blogs[i].category %></td>
+                        <td><%= blogs[i].views %></td>
+                        <td><%= blogs[i].like %></td>
+                        <td>
+                          <a
+                            href="/admin/blog/detail/<%= blogs[i]._id %>"
+                            class="btn btn-primary"
+                            >Detail</a
+                          >
+                        </td>
+                      </tr>
+                      <%} %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="h-16"></div>
+          </main>
+        </div>
+        <% include ../../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+</html>

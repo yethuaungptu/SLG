@@ -16,6 +16,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  profile: {
+    type: String,
+  },
+  point: {
+    type: Number,
+    default: 0,
+  },
   bookmarkList: [
     {
       id: {
@@ -40,6 +47,10 @@ const UserSchema = new Schema({
       },
     },
   ],
+  created: {
+    type: Date,
+    default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+  },
 });
 
 UserSchema.pre("save", function (next) {

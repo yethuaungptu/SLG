@@ -10,6 +10,40 @@
   <body>
     <% include ./partial/navbar.ejs %>
     <h1 class="text-2xl text-center"><%= title %></h1>
+    <div class="row">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
+      >
+        <% if (blogs.length === 0) { %>
+        <div class="text-center col-span-3 mt-3">
+          <p class="text-lg font-semibold">No blog available.</p>
+        </div>
+        <%} %> <% for(var i = 0; i < blogs.length;i++){%>
+        <div class="card bg-base-100 w-96 shadow-sm">
+          <figure class="px-10 pt-10">
+            <% if (blogs[i].image) { %>
+            <img src="<%= blogs[i].image %>" alt="Shoes" class="rounded-xl" />
+            <%} else{%>
+            <img
+              src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+              alt="Shoes"
+              class="rounded-xl"
+            />
+            <%}%>
+          </figure>
+          <div class="card-body items-center text-center">
+            <h2 class="card-title"><%= blogs[i].title %></h2>
+            <p class="line-clamp-3"><%= blogs[i].content %></p>
+            <div class="card-actions">
+              <a class="btn btn-primary" href="/blogs/<%= blogs[i]._id %>"
+                >More Details</a
+              >
+            </div>
+          </div>
+        </div>
+        <%}%>
+      </div>
+    </div>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>

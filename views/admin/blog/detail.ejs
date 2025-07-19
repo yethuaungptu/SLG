@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide Admin</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="drawer lg:drawer-open">
+        <input id="left-sidebar-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+          <div class="navbar sticky top-0 bg-base-100 z-10 shadow-md">
+            <div class="flex-1">
+              <label
+                for="left-sidebar-drawer"
+                class="btn btn-primary drawer-button lg:hidden"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  class="h-5 inline-block w-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  ></path>
+                </svg>
+              </label>
+              <h1 class="text-2xl font-semibold ml-2"></h1>
+            </div>
+          </div>
+          <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
+            <div
+              class="max-w-3xl mx-auto bg-base-100 shadow-xl rounded-xl p-6 space-y-6"
+            >
+              <!-- Blog Title -->
+              <h1 class="text-3xl font-bold text-primary"><%= blog.title %></h1>
+              <div class="flex gap-3 mt-4 md:mt-0">
+                <div class="badge badge-outline gap-1 text-sm">
+                  👁 <span><%= blog.views %></span> views
+                </div>
+                <div class="badge badge-outline gap-1 text-sm">
+                  ❤️ <span><%= blog.like %></span> likes
+                </div>
+              </div>
+              <!-- Cover Image -->
+              <div class="rounded-xl overflow-hidden">
+                <img
+                  src="<%= blog.image %>"
+                  alt="Eco Cover"
+                  class="w-full object-cover"
+                />
+              </div>
+
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-2">
+                <% for(var i = 0; i < blog.tags.length;i++){%>
+                <div class="badge badge-secondary badge-outline">
+                  <%= blog.tags[i] %>
+                </div>
+                <%}%>
+              </div>
+
+              <!-- Blog Content -->
+              <div class="prose max-w-none">
+                <p><%= blog.content %></p>
+              </div>
+
+              <!-- Optional Comments -->
+              <div class="divider"></div>
+              <div>
+                <h3 class="text-lg font-semibold mb-2">Comments</h3>
+                <div class="space-y-4">
+                  <% for(var i = 0; i < blog.comments.length; i++){%>
+                  <div class="p-3 bg-base-300 rounded-lg">
+                    <p class="text-sm font-semibold">John Smith</p>
+                    <p class="text-sm">
+                      Great tips! I’ll definitely try biking more often.
+                    </p>
+                  </div>
+                  <%}%>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="card-actions justify-end">
+                <button class="btn btn-error" onclick="deleteTip()">
+                  Delete
+                </button>
+                <a
+                  class="btn btn-info"
+                  href="/admin/blog/update/<%= blog._id %>"
+                  >Update</a
+                >
+              </div>
+            </div>
+
+            <div class="h-16"></div>
+          </main>
+        </div>
+        <% include ../../partial/adminDrawer %>
+      </div>
+    </div>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    function deleteTip() {
+      if (!confirm("Are you sure you want to delete this tip?")) {
+        return;
+      }
+      $.ajax({
+        url: "/admin/blog/delete",
+        type: "POST",
+        data: {
+          blogId: "<%= blog._id %>",
+        },
+        success: function (response) {
+          if (response.status === "success") {
+            location.href = "/admin/blog";
+          } else {
+            alert("Error deleting tip");
+          }
+        },
+        error: function () {
+          alert("Error connecting to the server.");
+        },
+      });
+    }
+  </script>
+</html>

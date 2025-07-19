@@ -103,19 +103,37 @@
           </div>
           <p></p>
           <div class="card-actions justify-end">
-            <% if(tip.isFeatured){%>
-            <button class="btn btn-warning" onclick="changeFeature(false);">
-              Take Bookmark
-            </button>
-            <%}else{%>
-            <button class="btn btn-warning" onclick="changeFeature(true);">
+            <% if(locals.user) { if(locals.user.bookmarkList.length > 0 &&
+            locals.user.bookmarkList?.filter(list => list.id == tip._id)[0]){%>
+            <button class="btn btn-warning" onclick="addBookmark(false);">
               Remove Bookmark
             </button>
-            <%}%>
+            <%}else{%>
+            <button class="btn btn-secondary" onclick="addBookmark(true);">
+              Take Bookmark
+            </button>
+            <%} }%>
           </div>
         </div>
       </div>
     </div>
     <% include ./partial/footer.ejs %>
   </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    function addBookmark(type) {
+      const data = { id: "<%= tip._id %>", type };
+      $.ajax("/user/bookmarkTip", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+  </script>
 </html>

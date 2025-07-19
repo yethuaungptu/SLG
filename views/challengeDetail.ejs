@@ -13,7 +13,7 @@
       class="card w-full p-6 bg-base-100 border border-base-300 shadow-xl mt-2"
     >
       <div class="text-xl font-semibold grid grid-cols-3 items-center">
-        <div class="col-span-2"><%= challenge.title %></div>
+        <div class="col-span-2"><%= challenge.name %></div>
         <% if (challenge.isFeatured){%>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,19 +37,32 @@
           <img src="<%= challenge.image %>" alt="challenge image" />
         </figure>
         <div class="card-body">
-          <div class="grid grid-cols-1 lg:grid-cols-3">
+          <div class="grid grid-cols-1 lg:grid-cols-4">
             <h2 class="card-title">Category : <%= challenge.category %></h2>
             <h2 class="card-title">Point : <%= challenge.point %></h2>
             <h2 class="card-title">Difficulty : <%= challenge.difficulty %></h2>
+            <h2 class="card-title">Status : <%= challenge.status %></h2>
           </div>
           <div
             class="collapse collapse-arrow bg-base-100 border border-base-300"
           >
             <input type="radio" name="challenge-info" checked="checked" />
             <div class="collapse-title font-semibold">Date</div>
-            <div class="collapse-content text-sm">
-              Start Date : <%= challenge.startDate %> End Date : <%=
-              challenge.endDate %>
+            <div
+              class="collapse-content text-sm grid grid-cols-1 md:grid-cols-2"
+            >
+              <div class="card">
+                <div class="card-title">Start Date</div>
+                <div class="card-body">
+                  <div><%= challenge.updated_startDate %></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title">End Date</div>
+                <div class="card-body">
+                  <div><%= challenge.updated_endDate %></div>
+                </div>
+              </div>
             </div>
           </div>
           <div
@@ -79,19 +92,44 @@
           </div>
           <p></p>
           <div class="card-actions justify-end">
-            <% if(challenge.isFeatured){%>
-            <button class="btn btn-warning" onclick="changeFeature(false);">
-              Take Bookmark
-            </button>
+            <% if(locals.user) { if(locals.user.challengeList.length > 0 &&
+            locals.user.challengeList?.filter(list => list.id ==
+            challenge._id)[0]){%>
+            <a
+              class="btn btn-warning"
+              href="/user/challenge/<%= challenge._id %>"
+            >
+              Go to challenge section
+            </a>
             <%}else{%>
-            <button class="btn btn-warning" onclick="changeFeature(true);">
-              Remove Bookmark
+            <button
+              class="btn btn-secondary"
+              onclick="joinChallenge('<%= challenge._id %>');"
+            >
+              Join Challenge
             </button>
-            <%}%>
+            <%} }%>
           </div>
         </div>
       </div>
     </div>
     <% include ./partial/footer.ejs %>
   </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    function joinChallenge(id) {
+      const data = { id: id };
+      $.ajax("/user/joinChallenge", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+  </script>
 </html>

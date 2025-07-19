@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <div data-id="1" class="aos-item my-5" data-aos="fade-up">
+      <div class="text-4xl font-bold text-center">Bookmarked Tips</div>
+      <div class="row">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
+        >
+          <% if (tips.length === 0) { %>
+          <div class="text-center col-span-3 mt-3">
+            <p class="text-lg font-semibold">No bookmarked tip available.</p>
+          </div>
+          <%} %> <% for(var i = 0; i < tips.length;i++){%>
+          <div class="card bg-base-100 w-96 shadow-sm">
+            <figure class="px-10 pt-10">
+              <% if (tips[i].image) { %>
+              <img src="<%= tips[i].image %>" alt="Shoes" class="rounded-xl" />
+              <%} else{%>
+              <img
+                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                alt="Shoes"
+                class="rounded-xl"
+              />
+              <%}%>
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">
+                <%= tips[i].title %> <% if(tips[i].isFeatured){%>
+                <div class="badge badge-primary">Featured</div>
+                <%}%>
+              </h2>
+              <p><%= tips[i].description %></p>
+              <div class="card-actions">
+                <a class="btn btn-primary" href="/tips/<%= tips[i]._id %>"
+                  >More Details</a
+                >
+              </div>
+            </div>
+          </div>
+          <%}%>
+        </div>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

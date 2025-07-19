@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <div data-id="1" class="aos-item my-5" data-aos="fade-up">
+      <!-- <div class="text-4xl font-bold text-center">Challenge Detail</div> -->
+      <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Challenge Header -->
+        <div class="card bg-base-100 shadow-xl mb-6">
+          <figure>
+            <img
+              src="<%= challenge.image %>"
+              alt="Challenge Image"
+              class="w-full h-56 object-cover"
+            />
+          </figure>
+          <div class="card-body">
+            <h2 class="card-title text-2xl font-bold">
+              🌱 <%= challenge.name %>
+            </h2>
+            <p class="text-gray-500"><%= challenge.description %></p>
+            <div class="flex flex-wrap gap-4 mt-3">
+              <span class="badge badge-info"
+                >Category: <%= challenge.category %></span
+              >
+              <span class="badge badge-accent"
+                >Difficulty: <%= challenge.difficulty %></span
+              >
+              <span class="badge badge-outline"
+                >Points: <%= challenge.point %></span
+              >
+              <span
+                class="badge badge-<%= challenge.status === 'ongoing' ? 'success' : status === 'not start' ? 'neutral' : 'error'%>"
+              >
+                Status: <%= challenge.status %>
+              </span>
+              <span class="badge badge-success"
+                >Benefit: <%= challenge.benefit %></span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Section -->
+        <% if(challenge.status === "ongoing"){%>
+        <div class="mb-8">
+          <label class="label">
+            <span class="label-text font-medium">Your Progress</span>
+          </label>
+          <progress
+            class="progress progress-primary w-full"
+            value="<%= challenge.currentDay %>"
+            max="<%= challenge.dailyTasks.length %>"
+          ></progress>
+          <p class="text-sm mt-1">
+            Day <%= challenge.currentDay %> of <%= challenge.dailyTasks.length
+            %>
+          </p>
+        </div>
+
+        <!-- Today's Task -->
+        <div class="card bg-base-100 shadow-lg mb-8">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Today's Task</h3>
+            <p class="font-medium">
+              <%= challenge.dailyTasks.filter((item)=> item.day ==
+              challenge.currentDay)[0].title %>
+            </p>
+            <p class="text-sm text-gray-500 mb-4">
+              <%= challenge.dailyTasks.filter((item)=> item.day ==
+              challenge.currentDay)[0].description %>
+            </p>
+            <% if(!isCompletedToday){%>
+            <button
+              class="btn btn-success w-fit"
+              onclick="makeTaskComplete('<%= challenge._id %>','<%= challenge.currentDay %>')"
+            >
+              Mark as Completed
+            </button>
+            <%}else{%>
+            <button class="btn btn-accent w-fit">Task is completed</button>
+            <%}%>
+          </div>
+        </div>
+        <%}%>
+        <!-- Past Task History -->
+        <div class="card bg-base-100 shadow-lg">
+          <div class="card-body">
+            <h3 class="card-title text-lg mb-4">Task History</h3>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra w-full">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Loop through dailyTasks -->
+                  <!-- Highlight if day is in completedDays -->
+                  <% for(var i = 0; i < challenge.dailyTasks.length;i++){
+                  if(challenge.dailyTasks[i].day > challenge.currentDay)
+                  continue; %>
+                  <tr>
+                    <td><%= challenge.dailyTasks[i].day %></td>
+                    <td><%= challenge.dailyTasks[i].title %></td>
+                    <td>
+                      <%
+                      if(myCompletedDay.includes(Number(challenge.dailyTasks[i].day))
+                      && challenge.dailyTasks[i].day <= challenge.currentDay){%>
+                      <span class="badge badge-success">Completed</span>
+                      <%}else if(challenge.dailyTasks[i].day ==
+                      challenge.currentDay){%>
+                      <span class="badge badge-accent">On progress </span>
+                      <%}else{%>
+                      <span class="badge badge-error">Missed </span>
+                      <%}%>
+                    </td>
+                  </tr>
+                  <%}%>
+
+                  <!-- etc. -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+    function makeTaskComplete(id, day) {
+      $.ajax({
+        url: "/user/challengeTaskComplete",
+        type: "POST",
+        data: {
+          cid: id,
+          currentDay: day,
+        },
+        success: function (response) {
+          if (response.status === "success") {
+            location.reload();
+          } else {
+            alert("Error complete task");
+          }
+        },
+        error: function () {
+          alert("Error connecting to the server.");
+        },
+      });
+    }
+  </script>
+</html>

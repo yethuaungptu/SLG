@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require("../models/User");
 var Tip = require("../models/Tip");
 var Challenge = require("../models/Challenge");
+var Blog = require("../models/Blog");
 
 /* GET home page. */
 
@@ -14,7 +15,7 @@ router.post("/register", async (req, res, next) => {
   try {
     const exitingUser = await User.findOne({ email: req.body.email });
     if (exitingUser) {
-      res.json({ status: "false", message: "Exit user with this email" });
+      res.json({ status: false, message: "Exit user with this email" });
       return;
     }
     const user = new User();
@@ -25,7 +26,7 @@ router.post("/register", async (req, res, next) => {
     res.json({ status: "true", message: "User registered successfully" });
   } catch (error) {
     console.error("Error during registration:", error);
-    res.json({ status: "false", message: "Registration failed" });
+    res.json({ status: false, message: "Registration failed" });
   }
 });
 
@@ -37,15 +38,18 @@ router.post("/login", async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (user != null && User.compare(req.body.password, user.password)) {
-    req.session.donor = {
+    console.log(user);
+    req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
+      bookmarkList: user.bookmarkList,
+      challengeList: user.challengeList,
     };
-    res.json({ status: "true", message: "Login successful" });
+    res.json({ status: true, message: "Login successful" });
   } else {
     res.json({
-      status: "false",
+      status: false,
       message: "Email not found or password not match",
     });
   }
@@ -105,6 +109,7 @@ router.get("/challenges", async (req, res, next) => {
 
 router.get("/challenges/:id", async (req, res, next) => {
   const challenge = await Challenge.findById(req.params.id);
+  console.log(challenge.updated_startDate);
   res.render("challengeDetail", {
     title: "Eco Challenges",
     challenge: challenge,
@@ -115,8 +120,18 @@ router.get("/calculator", (req, res, next) => {
   res.render("calculator", { title: "Eco Calculator" });
 });
 
-router.get("/blogs", (req, res, next) => {
-  res.render("blogs", { title: "Blog" });
+router.get("/blogs", async (req, res, next) => {
+  const blogs = await Blog.find({ isDeleted: false }).sort({
+    created: -1,
+    isFeatured: 1,
+  });
+  res.render("blogs", { title: "Blog", blogs: blogs });
+});
+
+router.get("/blogs/:id", async (req, res, next) => {
+  const blog = await Blog.findById(req.params.id);
+  await Blog.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+  res.render("blogDetail", { title: "Blog", blog: blog });
 });
 
 router.get("/community", (req, res, next) => {
