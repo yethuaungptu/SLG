@@ -95,6 +95,7 @@
                         <th>Category</th>
                         <th>Views</th>
                         <th>Likes</th>
+                        <th>Comment</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -115,7 +116,8 @@
                         </td>
                         <td><%= blogs[i].category %></td>
                         <td><%= blogs[i].views %></td>
-                        <td><%= blogs[i].like %></td>
+                        <td><%= blogs[i].like.length %></td>
+                        <td><%= blogs[i].comments.length %></td>
                         <td>
                           <a
                             href="/admin/blog/detail/<%= blogs[i]._id %>"

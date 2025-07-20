@@ -19,7 +19,7 @@
           👁 <span><%= blog.views %></span> views
         </div>
         <div class="badge badge-outline gap-1 text-sm">
-          ❤️ <span><%= blog.like %></span> likes
+          ❤️ <span><%= blog.like.length %></span> likes
         </div>
       </div>
       <!-- Cover Image -->
@@ -46,6 +46,29 @@
       <div class="prose max-w-none">
         <p><%= blog.content %></p>
       </div>
+      <% if(locals.user){%>
+      <div class="flex flex-row-reverse mt-4">
+        <% if(blog.like.includes(locals.user.id)){%>
+        <button class="btn btn-accent" onclick="likeAction('unlike')">
+          Unlike
+        </button>
+        <%}else{%>
+        <button class="btn btn-primary" onclick="likeAction('like')">
+          Like
+        </button>
+        <%}%>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Leave a Comment</h3>
+        <textarea class="textarea w-full" id="comment"></textarea>
+        <div class="flex justify-end mt-2">
+          <button class="btn btn-neutral mt-2" onclick="giveComment()">
+            Submit Comment
+          </button>
+        </div>
+      </div>
+      <%}%>
 
       <!-- Optional Comments -->
       <div class="divider"></div>
@@ -54,10 +77,8 @@
         <div class="space-y-4">
           <% for(var i = 0; i < blog.comments.length; i++){%>
           <div class="p-3 bg-base-300 rounded-lg">
-            <p class="text-sm font-semibold">John Smith</p>
-            <p class="text-sm">
-              Great tips! I’ll definitely try biking more often.
-            </p>
+            <p class="text-sm font-semibold"><%= blog.comments[i].name %></p>
+            <p class="text-sm"><%= blog.comments[i].message %></p>
           </div>
           <%}%>
         </div>
@@ -67,9 +88,43 @@
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
     AOS.init({
       mirror: true,
     });
+    function likeAction(type) {
+      const data = { id: "<%= blog._id %>", type };
+      $.ajax("/user/likeActionForBlog", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+    function giveComment() {
+      const comment = $("#comment").val();
+      if (comment.trim() === "") {
+        alert("Please enter a comment.");
+        return;
+      }
+      const data = { id: "<%= blog._id %>", comment };
+      $.ajax("/user/giveCommentForBlog", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
   </script>
 </html>

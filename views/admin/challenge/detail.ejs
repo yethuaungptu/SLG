@@ -63,13 +63,20 @@
                   <img src="<%= challenge.image %>" alt="challenge image" />
                 </figure>
                 <div class="card-body">
-                  <div class="grid grid-cols-1 lg:grid-cols-3">
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
                     <h2 class="card-title">
                       Category : <%= challenge.category %>
                     </h2>
                     <h2 class="card-title">Point : <%= challenge.point %></h2>
                     <h2 class="card-title">
                       Difficulty : <%= challenge.difficulty %>
+                    </h2>
+                    <h2 class="card-title">Status : <%= challenge.status %></h2>
+                    <h2 class="card-title">
+                      Joined : <%= challenge.participants.length %>
+                    </h2>
+                    <h2 class="card-title">
+                      Current Day : <%= challenge.currentDay %>
                     </h2>
                   </div>
                   <div
@@ -81,9 +88,21 @@
                       checked="checked"
                     />
                     <div class="collapse-title font-semibold">Date</div>
-                    <div class="collapse-content text-sm">
-                      Start Date : <%= challenge.startDate %> End Date : <%=
-                      challenge.endDate %>
+                    <div
+                      class="collapse-content text-sm grid grid-cols-1 md:grid-cols-2"
+                    >
+                      <div class="card">
+                        <div class="card-title">Start Date</div>
+                        <div class="card-body">
+                          <div><%= challenge.updated_startDate %></div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-title">End Date</div>
+                        <div class="card-body">
+                          <div><%= challenge.updated_endDate %></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div

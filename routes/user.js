@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require("../models/User");
 var Tip = require("../models/Tip");
 var Challenge = require("../models/Challenge");
+var Blog = require("../models/Blog");
 var moment = require("moment-timezone");
 const mongoose = require("mongoose");
 
@@ -17,7 +18,16 @@ const checkUser = function (req, res, next) {
 /* GET users listing. */
 router.get("/", checkUser, async function (req, res, next) {
   const user = await User.findById(req.session.user.id);
-  res.render("user/index", { user: user });
+  const likes = await Blog.aggregate([
+    {
+      $match: {
+        like: { $in: [new mongoose.Types.ObjectId(req.session.user.id)] },
+      },
+    },
+    { $group: { _id: null, count: { $sum: 1 } } },
+  ]);
+  const likeCount = likes.length > 0 ? likes[0].count : 0;
+  res.render("user/index", { user: user, likeCount: likeCount });
 });
 
 router.post("/bookmarkTip", checkUser, async (req, res) => {
@@ -199,6 +209,56 @@ router.post("/challengeTaskComplete", checkUser, async function (req, res) {
       $inc: { point: incrementPoint },
     });
     res.json({ status: "success" });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: false,
+      message: "Somethings was wrong",
+    });
+  }
+});
+
+router.post("/likeActionForBlog", checkUser, async (req, res) => {
+  try {
+    if (req.body.type == "like") {
+      await Blog.findByIdAndUpdate(req.body.id, {
+        $push: { like: req.session.user.id },
+      });
+    } else {
+      await Blog.findByIdAndUpdate(
+        req.body.id,
+        {
+          $pull: { like: req.session.user.id },
+        },
+        { new: true }
+      );
+    }
+    res.json({ status: true, message: "Blog like change success" });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: false,
+      message: "Somethings was wrong",
+    });
+  }
+});
+
+router.post("/giveCommentForBlog", checkUser, async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.body.id);
+    if (!blog) {
+      return res.json({ status: false, message: "Blog not found" });
+    }
+    const newComment = {
+      userId: req.session.user.id,
+      name: req.session.user.name,
+      message: req.body.comment,
+      created: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+    };
+    await Blog.findByIdAndUpdate(req.body.id, {
+      $push: { comments: newComment },
+    });
+    res.json({ status: true, message: "Comment added successfully" });
   } catch (e) {
     console.log(e);
     res.json({

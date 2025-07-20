@@ -47,7 +47,7 @@
                   👁 <span><%= blog.views %></span> views
                 </div>
                 <div class="badge badge-outline gap-1 text-sm">
-                  ❤️ <span><%= blog.like %></span> likes
+                  ❤️ <span><%= blog.like.length %></span> likes
                 </div>
               </div>
               <!-- Cover Image -->
@@ -80,10 +80,10 @@
                 <div class="space-y-4">
                   <% for(var i = 0; i < blog.comments.length; i++){%>
                   <div class="p-3 bg-base-300 rounded-lg">
-                    <p class="text-sm font-semibold">John Smith</p>
-                    <p class="text-sm">
-                      Great tips! I’ll definitely try biking more often.
+                    <p class="text-sm font-semibold">
+                      <%= blog.comments[i].name %>
                     </p>
+                    <p class="text-sm"><%= blog.comments[i].message %></p>
                   </div>
                   <%}%>
                 </div>
