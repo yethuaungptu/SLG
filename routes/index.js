@@ -4,6 +4,7 @@ var User = require("../models/User");
 var Tip = require("../models/Tip");
 var Challenge = require("../models/Challenge");
 var Blog = require("../models/Blog");
+var Community = require("../models/Community");
 
 /* GET home page. */
 
@@ -134,8 +135,23 @@ router.get("/blogs/:id", async (req, res, next) => {
   res.render("blogDetail", { title: "Blog", blog: blog });
 });
 
-router.get("/community", (req, res, next) => {
-  res.render("community", { title: "Community" });
+router.get("/community", async (req, res, next) => {
+  const communities = await Community.find({
+    isDeleted: false,
+    status: "active",
+  })
+    .populate("createdBy", "name")
+    .sort({ created: -1 });
+  res.render("community", { title: "Community", communities: communities });
+});
+
+router.get("/community/:id", async (req, res) => {
+  const community = await Community.findById(req.params.id).populate(
+    "createdBy",
+    "name"
+  );
+  console.log(community);
+  res.render("communityDetail", { community: community });
 });
 
 router.get("/aboutus", (req, res, next) => {

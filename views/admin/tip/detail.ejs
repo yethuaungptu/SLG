@@ -161,6 +161,9 @@
                       href="/admin/tips/update/<%= tip._id %>"
                       >Update</a
                     >
+                    <button class="btn btn-primary" onclick="sentAlert()">
+                      Send Alert
+                    </button>
                   </div>
                 </div>
               </div>
@@ -211,6 +214,28 @@
             location.href = "/admin/tips";
           } else {
             alert("Error deleting tip");
+          }
+        },
+        error: function () {
+          alert("Error connecting to the server.");
+        },
+      });
+    }
+    function sentAlert() {
+      if (!confirm("Are you sure you want to send alert?")) {
+        return;
+      }
+      $.ajax({
+        url: "/admin/tips/sendMailTip",
+        type: "POST",
+        data: {
+          tipId: "<%= tip._id %>",
+        },
+        success: function (response) {
+          if (response.status === "success") {
+            alert("Alert sent successfully.");
+          } else {
+            alert("Error sending alert.");
           }
         },
         error: function () {

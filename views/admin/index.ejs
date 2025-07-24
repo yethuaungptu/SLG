@@ -37,38 +37,123 @@
             </div>
           </div>
           <main class="flex-1 overflow-y-auto md:pt-4 pt-4 px-6 bg-base-200">
-            <div class="hero h-4/5 bg-base-200">
-              <div class="hero-content">
-                <div class="max-w-md">
-                  <h1 class="text-2xl mt-8 font-bold">
-                    Admin Dashboard Starter Kit
-                  </h1>
-                  <p class="py-2 mt-4">
-                    ✓ <span class="font-semibold">Light/dark</span> mode toggle
-                  </p>
-                  <p class="py-2">
-                    ✓ <span class="font-semibold">Redux toolkit</span> and other
-                    utility libraries configured
-                  </p>
-                  <p class="py-2">
-                    ✓
-                    <span class="font-semibold">Calendar, Modal, Sidebar </span>
-                    components
-                  </p>
-                  <p class="py-2">
-                    ✓ User-friendly
-                    <span class="font-semibold">documentation</span>
-                  </p>
-                  <p class="py-2 mb-4">
-                    ✓ <span class="font-semibold">Daisy UI</span> components,
-                    <span class="font-semibold">Tailwind CSS</span> support
-                  </p>
-                  <a href="/app/dashboard"
-                    ><button class="btn bg-base-100 btn-outline">
-                      Get Started
-                    </button></a
-                  >
-                </div>
+            <div class="stats stats-vertical lg:stats-horizontal shadow w-full">
+              <div class="stat">
+                <div class="stat-title">Total Tips</div>
+                <div class="stat-value"><%= totalTip %></div>
+              </div>
+
+              <div class="stat">
+                <div class="stat-title">Total Challenge</div>
+                <div class="stat-value"><%= totalChallenge %></div>
+              </div>
+
+              <div class="stat">
+                <div class="stat-title">Total Blog</div>
+                <div class="stat-value"><%= totalBlog %></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 my-5 lg:my-9 gap-4">
+              <div class="overflow-x-auto card shadow">
+                <div class="text-center text-xl">Recent Tip</div>
+                <table class="table table-zebra">
+                  <!-- head -->
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Difficulty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for(var i = 0; i < recentTips.length;i++){%>
+                    <tr>
+                      <th><%= i+1 %></th>
+                      <td><%= recentTips[i].title %></td>
+                      <td><%= recentTips[i].category %></td>
+                      <td><%= recentTips[i].difficulty_level %></td>
+                    </tr>
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
+              <div class="overflow-x-auto card shadow">
+                <table class="table table-zebra">
+                  <div class="text-center text-xl">Recent Challenge</div>
+                  <!-- head -->
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Difficulty</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for(var i = 0; i < recentChallenges.length;i++){%>
+                    <tr>
+                      <th><%= i+1 %></th>
+                      <td><%= recentChallenges[i].name %></td>
+                      <td><%= recentChallenges[i].category %></td>
+                      <td><%= recentChallenges[i].difficulty %></td>
+                    </tr>
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 my-5 gap-4">
+              <div class="overflow-x-auto card shadow">
+                <div class="text-center text-xl">Recent Blog</div>
+                <table class="table table-zebra">
+                  <!-- head -->
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Likes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for(var i = 0; i < recentBlogs.length;i++){%>
+                    <tr>
+                      <th><%= i+1 %></th>
+                      <td><%= recentBlogs[i].title %></td>
+                      <td><%= recentBlogs[i].category %></td>
+                      <td><%= recentBlogs[i].like.length %></td>
+                    </tr>
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
+              <div class="overflow-x-auto card shadow">
+                <table class="table table-zebra">
+                  <div class="text-center text-xl">Recent Community</div>
+                  <!-- head -->
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Total Post</th>
+                      <th>Total Member</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- row 1 -->
+                    <% for(var i = 0; i < recentCommunities.length;i++){%>
+                    <tr>
+                      <th><%= i+1 %></th>
+                      <td><%= recentCommunities[i].name %></td>
+                      <td>
+                        <%= recentCommunities[i].stats.conservationCount %>
+                      </td>
+                      <td><%= recentCommunities[i].stats.membersCount %></td>
+                    </tr>
+                    <%}%>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="h-16"></div>

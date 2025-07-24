@@ -20,7 +20,10 @@
             <div
               class="w-28 rounded-full ring ring-success ring-offset-base-100 ring-offset-2"
             >
-              <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar" />
+              <img
+                src="https://avatar.iran.liara.run/public"
+                alt="User Avatar"
+              />
             </div>
           </div>
 
@@ -54,11 +57,11 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-center">
         <div class="stat bg-base-100 shadow rounded-lg">
           <div class="stat-title font-bold">Communities Posts</div>
-          <div class="stat-value text-primary">-</div>
+          <div class="stat-value text-primary"><%= postCount %></div>
         </div>
         <div class="stat bg-base-100 shadow rounded-lg">
           <div class="stat-title font-bold">Joined Communities</div>
-          <div class="stat-value text-secondary">-</div>
+          <div class="stat-value text-secondary"><%= joinedCommunities %></div>
         </div>
         <div class="stat bg-base-100 shadow rounded-lg">
           <div class="stat-title font-bold">Likes</div>

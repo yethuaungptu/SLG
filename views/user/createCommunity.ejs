@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <div class="bg-gray-100 min-h-screen p-6 flex justify-center items-center">
+      <div class="w-full max-w-4xl bg-white p-10 rounded-xl shadow-xl">
+        <h1 class="text-3xl font-bold mb-8 text-center">Create a Community</h1>
+
+        <form
+          id="communityForm"
+          method="POST"
+          action="/user/community/create"
+          enctype="multipart/form-data"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Name -->
+            <div class="form-control">
+              <label class="label font-semibold">Community Name</label>
+              <input
+                type="text"
+                name="name"
+                class="input input-bordered w-full"
+                required
+              />
+            </div>
+
+            <!-- Status -->
+            <div class="form-control">
+              <label class="label font-semibold">Status</label>
+              <select name="status" class="select select-bordered w-full">
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+
+            <!-- Description -->
+            <div class="form-control md:col-span-2">
+              <label class="label font-semibold">Description</label>
+              <textarea
+                name="description"
+                class="textarea textarea-bordered w-full"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="form-control">
+              <label class="label font-semibold">Community Image</label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                class="file-input file-input-bordered w-full"
+              />
+            </div>
+
+            <!-- Is Public -->
+            <div class="form-control my-auto">
+              <label class="cursor-pointer label">
+                <span class="label-text font-semibold">Public Community?</span>
+                <input
+                  type="checkbox"
+                  name="isPublic"
+                  class="toggle toggle-primary"
+                  checked
+                />
+              </label>
+            </div>
+
+            <!-- Topics -->
+            <div class="form-control md:col-span-2">
+              <label class="label font-semibold"
+                >Topics (comma separated)</label
+              >
+              <input
+                type="text"
+                name="topics"
+                class="input input-bordered w-full"
+                placeholder="e.g. Eco, Waste"
+              />
+            </div>
+
+            <!-- Rules -->
+            <div class="form-control md:col-span-2">
+              <label class="label font-semibold">Rules (comma separated)</label>
+              <input
+                type="text"
+                name="rules"
+                class="input input-bordered w-full"
+                placeholder="e.g. No spam, Be kind"
+              />
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="mt-8">
+            <button type="submit" class="btn btn-primary w-full">
+              Create Community
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

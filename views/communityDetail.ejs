@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ./partial/navbar.ejs %>
+    <div class="bg-gray-100 px-6 py-6 lg:py-9">
+      <div
+        class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <!-- Image -->
+          <div class="md:col-span-1">
+            <img
+              src="<%= community.image %>"
+              alt="Community Image"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+
+          <!-- Details -->
+          <div class="md:col-span-2 p-6">
+            <div class="flex justify-between items-start">
+              <h2 class="text-3xl font-bold"><%= community.name %></h2>
+              <span class="badge badge-primary text-primary-content capitalize">
+                <%= community.status %>
+              </span>
+            </div>
+
+            <p class="text-gray-600 mt-2"><%= community.description %></p>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <% for(var i = 0; i < community.topics.length;i++){%>
+              <span class="badge badge-outline"
+                ><%= community.topics[i] %></span
+              >
+              <%}%>
+            </div>
+
+            <div class="mt-4">
+              <p class="text-sm text-gray-500">
+                <strong>Created by:</strong> <%= community.createdBy.name %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <strong>Created on:</strong> <%= community.created %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <strong>Visibility:</strong>
+                <span class="badge badge-info text-white text-info-content"
+                  ><%= community.isPublic ? "Public":"Private" %></span
+                >
+              </p>
+            </div>
+
+            <!-- Rules -->
+            <div class="mt-4">
+              <h3 class="text-md font-semibold mb-1">Rules:</h3>
+              <ul class="list-disc list-inside text-sm text-gray-600">
+                <% for(var i = 0; i < community.rules.length;i++){%>
+                <li><%= community.rules[i] %></li>
+                <%}%>
+              </ul>
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.membersCount %>
+                </p>
+                <p class="text-xs text-gray-500">Members</p>
+              </div>
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.likesCount ? community.stats.likesCount: 0
+                  %>
+                </p>
+                <p class="text-xs text-gray-500">Likes</p>
+              </div>
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.conservationCount ?
+                  community.stats.conservationCount: 0 %>
+                </p>
+                <p class="text-xs text-gray-500">Posts</p>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <% if(locals.user){%>
+            <div class="mt-6">
+              <% if(community.members.filter((item)=> item.userId ==
+              locals.user.id).length > 0){%>
+              <a
+                class="btn btn-primary w-full"
+                href="/user/community/<%= community._id %>"
+                >Check Community</a
+              >
+              <%}else{%>
+              <button
+                class="btn btn-primary w-full"
+                onclick="joinCommunity('<%= community._id %>')"
+              >
+                Join Community
+              </button>
+              <%}%>
+            </div>
+            <%}else{%>
+            <div class="mt-6">
+              <a class="btn btn-primary w-full" href="/login">
+                Login to join Community
+              </a>
+            </div>
+            <%}%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include ./partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    function joinCommunity(id) {
+      const data = { id: id };
+      $.ajax("/user/joinCommunity", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+  </script>
+</html>

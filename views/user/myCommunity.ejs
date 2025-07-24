@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <div class="max-w-4xl mx-auto space-y-6 my-2 min-h-96 my-3 lg:my-7">
+      <% if(communities.length == 0){%>
+      <div class="text-xl text-center">No community available</div>
+      <%}%> <% for(var i = 0; i < communities.length; i++){ %>
+      <div class="card bg-base-100 shadow-xl">
+        <div
+          class="card-body flex flex-col md:flex-row items-center md:items-start gap-6"
+        >
+          <div class="avatar">
+            <div
+              class="w-28 rounded-full ring ring-success ring-offset-base-100 ring-offset-2"
+            >
+              <img src="<%= communities[i].image %>" alt="User Avatar" />
+            </div>
+          </div>
+          <div class="flex-1 space-y-2 text-center md:text-left">
+            <h2 class="text-2xl font-bold text-secondary">
+              <%= communities[i].name %>
+            </h2>
+            <p class="text-base-content">
+              My Role : <%= (communities[i].createdBy == locals.user.id) ?
+              "Admin":"Member" %>
+            </p>
+            <p class="text-base-content">
+              Members : <%= communities[i].stats.membersCount %>
+            </p>
+            <div class="flex flex-row ms-3">
+              <a
+                href="/user/community/<%= communities[i]._id %>"
+                class="btn btn-primary"
+                >Enter</a
+              >
+              <% if(communities[i].createdBy == locals.user.id){ %>
+              <a
+                href="/user/community/edit/<%= communities[i]._id %>"
+                class="btn btn-secondary ml-2"
+                >Edit</a
+              >
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%}%>
+    </div>
+
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/aos.js"></script>
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+  </script>
+</html>

@@ -21,7 +21,10 @@ const CommunitySchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  createdAt: { type: Date, default: Date.now },
+  created: {
+    type: Date,
+    default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
+  },
 
   topics: [String],
   rules: [String],
@@ -32,7 +35,6 @@ const CommunitySchema = new mongoose.Schema({
     conservationCount: { type: Number, default: 0 },
     membersCount: { type: Number, default: 0 },
     likesCount: { type: Number, default: 0 },
-    viewsCount: { type: Number, default: 0 },
   },
 
   isPublic: { type: Boolean, default: true },
@@ -41,6 +43,14 @@ const CommunitySchema = new mongoose.Schema({
     enum: ["active", "inactive", "archived"],
     default: "active",
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+// CommunitySchema.virtual("updated_createdDate").get(function () {
+//   return moment.tz(this.created, "YYYY MM DD").format().split("T")[0];
+// });
 
 module.exports = mongoose.model("Community", CommunitySchema);

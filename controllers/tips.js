@@ -1,10 +1,20 @@
 var express = require("express");
 var router = express.Router();
 var multer = require("multer");
+const nodemailer = require("nodemailer");
 var moment = require("moment-timezone");
 const fs = require("fs");
 var Tip = require("../models/Tip");
+var User = require("../models/User");
 const upload = multer({ dest: "public/images/uploads" });
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "sustainablelivingguide.2025@gmail.com", // Your email
+    pass: "orhq pbuw uhow yrvu", // Your email password or app-specific password
+  },
+});
 
 router.get("/", async function (req, res) {
   var query = { isDeleted: false };
@@ -106,6 +116,44 @@ router.post("/update", upload.single("image"), async function (req, res) {
   } catch (e) {
     console.error("Error updating tip:", e);
     return;
+  }
+});
+
+router.post("/sendMailTip", async function (req, res) {
+  try {
+    const user = await User.find();
+    var mailList = [];
+    for (var i = 0; i < user.length; i++) {
+      if (user[i].email) {
+        mailList.push(user[i].email);
+      }
+    }
+    if (mailList.length === 0) {
+      return res.json({
+        status: false,
+        message: "No email found",
+      });
+    }
+    const mailOptions = {
+      from: "sustainablelivingguide.2025@gmail.com",
+      to: mailList.join(","),
+      subject: "Alert Message from Sustainable Living Guide",
+      html: "<p>Hello life saver, you can check following link to check</p>",
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        res.json({ status: false });
+        return console.log("Error:", error);
+      }
+      console.log("Email sent:", info.response);
+    });
+    res.json({ status: true, message: "Mail Sente successfully" });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: false,
+      message: "Something went wrong",
+    });
   }
 });
 

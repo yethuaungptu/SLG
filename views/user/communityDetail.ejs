@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html data-theme="mytheme">
+  <head>
+    <title>Sustainable Living Guide</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <% include ../partial/navbar.ejs %> <% include ../partial/subMenu.ejs %>
+    <div class="bg-gray-100 px-6 py-6 lg:py-9">
+      <div
+        class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <!-- Image -->
+          <div class="md:col-span-1">
+            <img
+              src="<%= community.image %>"
+              alt="Community Image"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+
+          <!-- Details -->
+          <div class="md:col-span-2 p-6">
+            <div class="flex justify-between items-start">
+              <h2 class="text-3xl font-bold"><%= community.name %></h2>
+              <span class="badge badge-primary text-primary-content capitalize">
+                <%= community.status %>
+              </span>
+            </div>
+
+            <p class="text-gray-600 mt-2"><%= community.description %></p>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <% for(var i = 0; i < community.topics.length;i++){%>
+              <span class="badge badge-outline"
+                ><%= community.topics[i] %></span
+              >
+              <%}%>
+            </div>
+
+            <div class="mt-4">
+              <p class="text-sm text-gray-500">
+                <strong>Created by:</strong> <%= community.createdBy.name %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <strong>Admin :</strong> <%= community.members.filter((item)=>
+                item.role === "admin")[0].userId.name %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <strong>Created on:</strong> <%= community.created %>
+              </p>
+              <p class="text-sm text-gray-500">
+                <strong>Visibility:</strong>
+                <span class="badge badge-info text-white text-info-content"
+                  ><%= community.isPublic ? "Public":"Private" %></span
+                >
+              </p>
+            </div>
+
+            <!-- Rules -->
+            <div class="mt-4">
+              <h3 class="text-md font-semibold mb-1">Rules:</h3>
+              <ul class="list-disc list-inside text-sm text-gray-600">
+                <% for(var i = 0; i < community.rules.length;i++){%>
+                <li><%= community.rules[i] %></li>
+                <%}%>
+              </ul>
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.membersCount %>
+                </p>
+                <p class="text-xs text-gray-500">Members</p>
+              </div>
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.likesCount ? community.stats.likesCount: 0
+                  %>
+                </p>
+                <p class="text-xs text-gray-500">Likes</p>
+              </div>
+              <div>
+                <p class="text-lg font-bold">
+                  <%= community.stats.conservationCount %>
+                </p>
+                <p class="text-xs text-gray-500">Posts</p>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+
+            <div class="mt-6">
+              <% if(isAdmin){%>
+              <button
+                class="btn btn-warning w-full"
+                onclick="my_modal_1.showModal()"
+              >
+                Change Community Admin
+              </button>
+              <%}else{%>
+              <button
+                class="btn btn-error w-full"
+                onclick="leaveCommunity('<%= community._id %>')"
+              >
+                Leave Community
+              </button>
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="sticky top-26 z-10 max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden my-2 p-6"
+      >
+        <h2 class="text-xl font-semibold mb-4">Create a New Post</h2>
+
+        <!-- Post content -->
+        <div class="form-control mb-4">
+          <label class="label font-medium">Your Post</label>
+          <textarea
+            name="post"
+            class="textarea textarea-bordered w-full"
+            rows="4"
+            id="postContent"
+            placeholder="Share something with the community..."
+            required
+          ></textarea>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary w-full"
+          onclick="createPost()"
+        >
+          Post
+        </button>
+      </div>
+      <div class="max-w-5xl mx-auto overflow-y-auto space-y-6 mt-2">
+        <!-- 🧾 Single Post Card -->
+        <% if(posts.length === 0){ %>
+        <div class="bg-white shadow-md rounded-lg p-4 text-center">
+          <p class="text-gray-500">No posts yet. Be the first to share!</p>
+        </div>
+        <% } %> <% for(var i = 0; i < posts.length;i++) { %>
+        <div class="bg-white shadow-md rounded-lg p-4">
+          <!-- Post Header -->
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="avatar">
+                <div
+                  class="w-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
+                >
+                  <img src="https://avatar.iran.liara.run/public" />
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-semibold"><%= posts[i].userId.name %></p>
+                <p class="text-xs text-gray-500">July 22, 2025</p>
+              </div>
+            </div>
+            <span class="text-sm text-gray-400 postId"
+              >#<%= posts[i]._id %></span
+            >
+          </div>
+
+          <!-- Post Content -->
+          <p class="mb-3 text-gray-800"><%= posts[i].post %></p>
+
+          <!-- Post Actions -->
+          <div
+            class="flex items-center justify-between text-sm text-gray-500 mb-4"
+          >
+            <% if (posts[i].likes && posts[i].likes.includes(locals.user.id)) {
+            %>
+            <button
+              class="btn btn-sm btn-primary"
+              onclick="likePost('<%= posts[i]._id %>','unlike')"
+            >
+              👎 Unlike
+            </button>
+            <%}else{%>
+            <button
+              class="btn btn-sm btn-primary"
+              onclick="likePost('<%= posts[i]._id %>','like')"
+            >
+              👍 Like
+            </button>
+            <%}%>
+            <span><%= posts[i].likes? posts[i].likes?.length :0 %> Likes</span>
+          </div>
+
+          <!-- 💬 Comment List -->
+          <div class="space-y-3 mb-3">
+            <% for(var j = 0; j < posts[i].comments.length;j++){%>
+            <div class="border-l-4 border-primary pl-3 text-sm">
+              <p>
+                <span class="font-semibold">
+                  <%= posts[i].comments[j].userId.name %>:
+                </span>
+                <%= posts[i].comments[j].content %>
+              </p>
+            </div>
+            <%}%>
+          </div>
+
+          <!-- 💭 Comment Input -->
+          <div class="flex gap-2">
+            <input
+              type="text"
+              name="content"
+              class="input input-bordered w-full"
+              placeholder="Write a comment..."
+              required
+            />
+            <button
+              type="button"
+              data-postid="<%= posts[i]._id %>"
+              class="btn btn-primary btnComment"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+        <%}%>
+      </div>
+      <dialog id="my_modal_1" class="modal">
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Select member for community admin!</h3>
+          <select class="select my-5" id="adminSelect">
+            <% for(var i = 0; i < community.members.length;i++){
+            if(community.members[i].userId._id == locals.user.id) continue; %>
+            <option value="<%= community.members[i].userId._id %>">
+              <%= community.members[i].userId.name %>
+            </option>
+            <%}%>
+          </select>
+          <div class="modal-action">
+            <form method="dialog">
+              <!-- if there is a button in form, it will close the modal -->
+              <button class="btn">Close</button>
+
+              <button class="btn btn-primary" onclick="changeAdmin()">
+                Change Admin
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    </div>
+    <% include ../partial/footer.ejs %>
+  </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script src="/javascripts/aos.js"></script>
+
+  <script>
+    AOS.init({
+      mirror: true,
+    });
+    function createPost() {
+      const postContent = $("#postContent").val();
+      if (postContent.trim() === "") {
+        alert("Post content cannot be empty.");
+        return;
+      }
+      const data = {
+        communityId: "<%= community._id %>",
+        content: postContent,
+      };
+      $.ajax("/user/createCommunityPost", {
+        type: "POST",
+        data: data,
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+    function likePost(postId, action) {
+      $.ajax("/user/likeCommunityPost", {
+        type: "POST",
+        data: { postId: postId, action: action },
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+    $(() => {
+      $(".btnComment").click(function () {
+        console.log("click");
+        const commentContent = $(this).siblings("input[name='content']").val();
+        if (commentContent.trim() === "") {
+          alert("Comment cannot be empty.");
+          return;
+        }
+        const postId = $(this).data("postid");
+        console.log($(this).data("postid"));
+        $.ajax("/user/commentCommunityPost", {
+          type: "POST",
+          data: { postId: postId, content: commentContent },
+          success: function (result) {
+            if (result.status == false) {
+              alert(result.message);
+            } else {
+              location.reload();
+            }
+          },
+        });
+      });
+    });
+    function changeAdmin() {
+      const adminId = $("#adminSelect").val();
+      const communityId = "<%= community._id %>";
+      $.ajax("/user/changeCommunityAdmin", {
+        type: "POST",
+        data: { adminId: adminId, communityId: communityId },
+        success: function (result) {
+          if (result.status == false) {
+            alert(result.message);
+          } else {
+            location.reload();
+          }
+        },
+      });
+    }
+    function leaveCommunity(cid) {
+      var check = confirm("Are you sure for leaving this community?");
+      if (check) {
+        $.ajax("/user/leaveCommunity", {
+          type: "POST",
+          data: { communityId: cid },
+          success: function (result) {
+            if (result.status == false) {
+              alert(result.message);
+            } else {
+              location.href = "/user";
+            }
+          },
+        });
+      }
+    }
+  </script>
+</html>

@@ -8,8 +8,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <% include ./partial/navbar.ejs %>
+    <% include ./partial/navbar.ejs %> <% if(locals.user){%>
+    <div class="flex flex-row justify-between my-2 mx-2 md:mx-9">
+      <h1 class="text-2xl text-center"><%= title %></h1>
+      <a href="/user/community/create" class="btn btn-primary"
+        >Create community</a
+      >
+    </div>
+    <%}else{%>
     <h1 class="text-2xl text-center"><%= title %></h1>
+    <%}%>
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-2 lg:my-9 mx-2 lg:mx-5"
+    >
+      <% for(var i = 0; i < communities.length;i++){%>
+      <div class="card bg-base-100 w-96 shadow-sm">
+        <figure class="px-10 pt-10">
+          <% if (communities[i].image) { %>
+          <img
+            src="<%= communities[i].image %>"
+            alt="Shoes"
+            class="rounded-xl"
+          />
+          <%} else{%>
+          <img
+            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+            alt="Shoes"
+            class="rounded-xl"
+          />
+          <%}%>
+        </figure>
+        <div class="card-body items-center">
+          <h2 class="card-title text-center"><%= communities[i].name %></h2>
+          <div class="card w-full bg-base-100 card-sm shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">
+                Member(s) : <%= communities[i].stats.membersCount %>
+              </h2>
+            </div>
+          </div>
+          <div class="card w-full bg-base-100 card-sm shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">
+                Visibility : <%= communities[i].isPublic ? "Public":"Private" %>
+              </h2>
+            </div>
+          </div>
+          <div class="card w-full bg-base-100 card-sm shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">
+                Created By : <%= communities[i].createdBy.name %>
+              </h2>
+            </div>
+          </div>
+          <div class="card-actions">
+            <a
+              class="btn btn-primary"
+              href="/community/<%= communities[i]._id %>"
+              >More Details</a
+            >
+          </div>
+        </div>
+      </div>
+      <%}%>
+    </div>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>
