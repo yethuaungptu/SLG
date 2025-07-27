@@ -232,7 +232,7 @@
           tipId: "<%= tip._id %>",
         },
         success: function (response) {
-          if (response.status === "success") {
+          if (response.status) {
             alert("Alert sent successfully.");
           } else {
             alert("Error sending alert.");

@@ -1209,21 +1209,6 @@
       }
     }
   }
-  .avatar-online {
-    &:before {
-      content: "";
-      position: absolute;
-      z-index: 1;
-      display: block;
-      border-radius: calc(infinity * 1px);
-      background-color: var(--color-success);
-      outline: 2px solid var(--color-base-100);
-      width: 15%;
-      height: 15%;
-      top: 7%;
-      right: 7%;
-    }
-  }
   .steps {
     display: inline-grid;
     grid-auto-flow: column;
@@ -2786,6 +2771,18 @@
       }
     }
   }
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
@@ -2936,14 +2933,11 @@
   .w-16 {
     width: calc(var(--spacing) * 16);
   }
-  .w-20 {
-    width: calc(var(--spacing) * 20);
+  .w-24 {
+    width: calc(var(--spacing) * 24);
   }
   .w-28 {
     width: calc(var(--spacing) * 28);
-  }
-  .w-32 {
-    width: calc(var(--spacing) * 32);
   }
   .w-52 {
     width: calc(var(--spacing) * 52);

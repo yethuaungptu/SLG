@@ -140,14 +140,15 @@ router.post("/sendMailTip", async function (req, res) {
       subject: "Alert Message from Sustainable Living Guide",
       html: "<p>Hello life saver, you can check following link to check</p>",
     };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        res.json({ status: false });
-        return console.log("Error:", error);
-      }
-      console.log("Email sent:", info.response);
-    });
-    res.json({ status: true, message: "Mail Sente successfully" });
+    // transporter.sendMail(mailOptions, (error, info) => {
+    //   if (error) {
+    //     res.json({ status: false });
+    //     return console.log("Error:", error);
+    //   }
+    //   console.log("Email sent:", info.response);
+    // });
+    let resp = await sendMail(mailOptions);
+    res.json({ status: true, message: "Mail Sent successfully" });
   } catch (e) {
     console.log(e);
     res.json({
@@ -156,5 +157,27 @@ router.post("/sendMailTip", async function (req, res) {
     });
   }
 });
+
+async function sendMail(mailOptions) {
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "sustainablelivingguide.2025@gmail.com", // Your email
+        pass: "orhq pbuw uhow yrvu", // Your email password or app-specific password
+      },
+    });
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log("error is " + error);
+        resolve(false); // or use rejcet(false) but then you will have to handle errors
+      } else {
+        console.log("Email sent: " + info.response);
+        resolve(true);
+      }
+    });
+  });
+}
 
 module.exports = router;

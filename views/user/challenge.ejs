@@ -37,7 +37,7 @@
                 >Points: <%= challenge.point %></span
               >
               <span
-                class="badge badge-<%= challenge.status === 'ongoing' ? 'success' : status === 'not start' ? 'neutral' : 'error'%>"
+                class="badge badge-<%= challenge.status === 'ongoing' ? 'success' : challenge.status === 'not start' ? 'neutral' : 'error'%>"
               >
                 Status: <%= challenge.status %>
               </span>
@@ -118,8 +118,8 @@
                       && challenge.dailyTasks[i].day <= challenge.currentDay){%>
                       <span class="badge badge-success">Completed</span>
                       <%}else if(challenge.dailyTasks[i].day ==
-                      challenge.currentDay){%>
-                      <span class="badge badge-accent">On progress </span>
+                      challenge.currentDay && challenge.status != "finished"){%>
+                      <span class="badge badge-accent">Progress </span>
                       <%}else{%>
                       <span class="badge badge-error">Missed </span>
                       <%}%>

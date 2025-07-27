@@ -147,7 +147,7 @@ router.get("/challenge/:id", checkUser, async function (req, res) {
   let isCompletedToday = false;
   let myCompletedDay = [];
   const challenge = await Challenge.findById(req.params.id);
-  if (challenge.status == "ongoing") {
+  if (challenge.status != "not start") {
     const res = challenge.participants.filter(
       (item) =>
         item.userId == req.session.user.id &&
@@ -157,7 +157,6 @@ router.get("/challenge/:id", checkUser, async function (req, res) {
     const completedDay = challenge.participants.filter(
       (item) => item.userId == req.session.user.id
     );
-    console.log(completedDay);
     if (completedDay.length > 0) myCompletedDay = completedDay[0].completedDays;
   }
   res.render("user/challenge", {
