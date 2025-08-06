@@ -36,6 +36,7 @@ router.get("/", checkUser, async function (req, res, next) {
   }).countDocuments();
   const postCount = await CommunityPost.countDocuments({
     userId: req.session.user.id,
+    isDeleted: false,
   });
   const likeCount = likes.length > 0 ? likes[0].count : 0;
   res.render("user/index", {
@@ -423,7 +424,10 @@ router.get("/community/:id", checkUser, async function (req, res) {
     ).length > 0
       ? true
       : false;
-  const posts = await CommunityPost.find({ communityId: community._id })
+  const posts = await CommunityPost.find({
+    communityId: community._id,
+    isDeleted: false,
+  })
     .populate("userId", "name email")
     .populate("comments.userId", "name email")
     .sort({ created: -1 });
@@ -555,6 +559,53 @@ router.post("/changeCommunityAdmin", checkUser, async function (req, res) {
     });
 
     res.json({ status: true, message: "Community admin changed successfully" });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: false,
+      message: "Something went wrong",
+    });
+  }
+});
+
+router.post("/deleteCommunityPost", checkUser, async function (req, res) {
+  try {
+    const community = await Community.findById(req.body.cid)
+      .populate("members.userId", "name email")
+      .populate("createdBy", "name");
+    if (!community) {
+      res.json({
+        status: false,
+        message: "Community Not Found",
+      });
+    }
+
+    const isMyOwn = await CommunityPost.findOne({
+      communityId: req.body.cid,
+      userId: req.session.userId,
+    });
+    const isAdmin =
+      community.members.filter(
+        (item) =>
+          item.userId._id.toString() == req.session.user.id &&
+          item.role == "admin"
+      ).length > 0
+        ? true
+        : false;
+    if (isAdmin || isMyOwn) {
+      await CommunityPost.findByIdAndUpdate(req.body.pid, {
+        $set: { isDeleted: true },
+      });
+      res.json({
+        status: true,
+        message: "Delete Success",
+      });
+    } else {
+      res.json({
+        status: false,
+        message: "Can't delete by other member",
+      });
+    }
   } catch (e) {
     console.log(e);
     res.json({

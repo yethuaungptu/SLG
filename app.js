@@ -22,7 +22,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-mongoose.connect("mongodb://127.0.0.1/slgdb");
+// mongoose.connect("mongodb://127.0.0.1/slgdb");
+// const db = mongoose.connection;
+// db.on("error", console.error.bind("mongodb connection error at slgdb"));
+
+mongoose.connect(
+  "mongodb+srv://slg:slg2025@slg.59yvemi.mongodb.net/?retryWrites=true&w=majority&appName=slg"
+);
 const db = mongoose.connection;
 db.on("error", console.error.bind("mongodb connection error at slgdb"));
 

@@ -4,6 +4,8 @@ var multer = require("multer");
 var moment = require("moment-timezone");
 const fs = require("fs");
 var Challenge = require("../models/Challenge");
+const User = require("../models/User");
+const nodemailer = require("nodemailer");
 const upload = multer({ dest: "public/images/uploads" });
 
 router.get("/", async function (req, res) {
@@ -13,7 +15,7 @@ router.get("/", async function (req, res) {
     filterValue = req.query.search;
     query = { category: filterValue, isDeleted: false };
   }
-  const challenges = await Challenge.find(query).sort({ createdAt: -1 });
+  const challenges = await Challenge.find(query).sort({ created: -1 });
   res.render("admin/challenge/index", {
     challenges: challenges,
     filterValue: filterValue,
@@ -113,5 +115,59 @@ router.post("/update", upload.single("image"), async function (req, res) {
     return;
   }
 });
+
+router.post("/sendMailChallenge", async function (req, res) {
+  try {
+    const user = await User.find();
+    var mailList = [];
+    for (var i = 0; i < user.length; i++) {
+      if (user[i].email) {
+        mailList.push(user[i].email);
+      }
+    }
+    if (mailList.length === 0) {
+      return res.json({
+        status: false,
+        message: "No email found",
+      });
+    }
+    const mailOptions = {
+      from: "sustainablelivingguide.2025@gmail.com",
+      to: mailList.join(","),
+      subject: "Alert Message from Sustainable Living Guide",
+      html: `<div><p>Hello life saver, please visit again our website. There are many new challenge you will also like. For example </p> <a href='https://www.slg.onrender.com/challenges/${req.body.challengeId}'>Challenge Details</a></div>`,
+    };
+    let resp = await sendMail(mailOptions);
+    res.json({ status: true, message: "Mail Sent successfully" });
+  } catch (e) {
+    console.log(e);
+    res.json({
+      status: false,
+      message: "Something went wrong",
+    });
+  }
+});
+
+async function sendMail(mailOptions) {
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "sustainablelivingguide.2025@gmail.com", // Your email
+        pass: "orhq pbuw uhow yrvu", // Your email password or app-specific password
+      },
+    });
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log("error is " + error);
+        resolve(false); // or use rejcet(false) but then you will have to handle errors
+      } else {
+        console.log("Email sent: " + info.response);
+        resolve(true);
+      }
+    });
+  });
+}
 
 module.exports = router;

@@ -9,10 +9,9 @@
   </head>
   <body>
     <% include ./partial/navbar.ejs %>
-    <div
+    <!-- <div
       class="max-w-3xl mx-auto bg-base-100 shadow-xl rounded-xl p-6 space-y-6 my-3"
     >
-      <!-- Blog Title -->
       <h1 class="text-3xl font-bold text-secondary"><%= blog.title %></h1>
       <div class="flex gap-3 mt-4 md:mt-0">
         <div class="badge badge-outline gap-1 text-sm">
@@ -22,7 +21,6 @@
           ❤️ <span><%= blog.like.length %></span> likes
         </div>
       </div>
-      <!-- Cover Image -->
       <div class="rounded-xl overflow-hidden">
         <img
           src="<%= blog.image %>"
@@ -33,7 +31,6 @@
       <div class="flex flex-wrap gap-2">
         <p class="font-thin italic text-xl"><%= blog.category %></p>
       </div>
-      <!-- Tags -->
       <div class="flex flex-wrap gap-2">
         <% for(var i = 0; i < blog.tags.length;i++){%>
         <div class="badge badge-secondary badge-outline">
@@ -42,7 +39,6 @@
         <%}%>
       </div>
 
-      <!-- Blog Content -->
       <div class="prose max-w-none">
         <p><%= blog.content %></p>
       </div>
@@ -70,7 +66,6 @@
       </div>
       <%}%>
 
-      <!-- Optional Comments -->
       <div class="divider"></div>
       <div>
         <h3 class="text-lg font-semibold mb-2">Comments</h3>
@@ -84,7 +79,104 @@
         </div>
       </div>
       <div class="divider"></div>
+    </div> -->
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <div class="bg-base-200 shadow-xl rounded-xl overflow-hidden">
+        <div class="grid md:grid-cols-2 gap-8 p-6">
+          <!-- Image Side -->
+          <div class="rounded-xl overflow-hidden">
+            <img
+              src="<%= blog.image %>"
+              alt="Cover"
+              class="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+
+          <!-- Content Side -->
+          <div class="flex flex-col justify-between">
+            <!-- Title & Meta -->
+            <div>
+              <h1 class="text-4xl font-bold text-secondary mb-4">
+                Hello Blog Post
+              </h1>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <div class="badge badge-outline">
+                  👁 <span><%= blog.views %></span> views
+                </div>
+                <div class="badge badge-outline">
+                  ❤️ <span><%= blog.like.length %></span> likes
+                </div>
+
+                <div class="badge badge-secondary"><%= blog.category %></div>
+              </div>
+
+              <!-- Tags -->
+              <div class="flex gap-2 flex-wrap mb-4">
+                <% for(var i = 0; i < blog.tags.length;i++){%>
+                <div class="badge badge-outline"><%= blog.tags[i] %></div>
+                <%}%>
+              </div>
+
+              <!-- Content -->
+              <div class="prose max-w-none">
+                <p><%= blog.content %></p>
+              </div>
+            </div>
+
+            <!-- Like Button -->
+            <% if(locals.user){%>
+            <div class="mt-6 text-right">
+              <% if(blog.like.includes(locals.user.id)){%>
+              <button
+                class="btn btn-error btn-sm"
+                onclick="likeAction('unlike')"
+              >
+                ❤️ Unlike
+              </button>
+              <%}else{%>
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="likeAction('like')"
+              >
+                ❤️ Like
+              </button>
+              <%}%>
+            </div>
+            <%}%>
+          </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="px-6 pb-6">
+          <div class="divider"></div>
+          <% if(locals.user){%>
+          <h2 class="text-xl font-semibold mb-2">Leave a Comment</h2>
+          <textarea
+            class="textarea textarea-bordered w-full mb-4"
+            placeholder="Write your comment..."
+            id="comment"
+          ></textarea>
+          <div class="text-right">
+            <button class="btn btn-primary" onclick="giveComment()">
+              Submit Comment
+            </button>
+          </div>
+          <%}%>
+          <!-- Comments -->
+          <div class="divider"></div>
+          <h2 class="text-xl font-semibold mb-2">Comments</h2>
+          <div class="space-y-4">
+            <% for(var i = 0; i < blog.comments.length; i++){%>
+            <div class="bg-base-300 p-3 rounded">
+              <p class="font-semibold text-sm"><%= blog.comments[i].name %></p>
+              <p class="text-sm"><%= blog.comments[i].message %></p>
+            </div>
+            <%}%>
+          </div>
+        </div>
+      </div>
     </div>
+
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>

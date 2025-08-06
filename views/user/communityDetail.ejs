@@ -27,9 +27,9 @@
           <div class="md:col-span-2 p-6">
             <div class="flex justify-between items-start">
               <h2 class="text-3xl font-bold"><%= community.name %></h2>
-              <span class="badge badge-primary text-primary-content capitalize">
+              <!-- <span class="badge badge-primary text-primary-content capitalize">
                 <%= community.status %>
-              </span>
+              </span> -->
             </div>
 
             <p class="text-gray-600 mt-2"><%= community.description %></p>
@@ -87,9 +87,7 @@
                 <p class="text-xs text-gray-500">Likes</p>
               </div>
               <div>
-                <p class="text-lg font-bold">
-                  <%= community.stats.conservationCount %>
-                </p>
+                <p class="text-lg font-bold"><%= posts.length %></p>
                 <p class="text-xs text-gray-500">Posts</p>
               </div>
             </div>
@@ -225,6 +223,16 @@
             >
               Send
             </button>
+            <% if(isAdmin || posts[i].userId.toString() == locals.user.id){%>
+            <button
+              type="button"
+              data-post-id="<%= posts[i]._id %>"
+              data-community-id="<%= community._id %>"
+              class="btn btn-error btnDelete"
+            >
+              Delete
+            </button>
+            <%}%>
           </div>
         </div>
         <%}%>
@@ -318,6 +326,24 @@
             }
           },
         });
+      });
+
+      $(".btnDelete").click(function () {
+        if (confirm("Are you sure for delete?")) {
+          const postId = $(this).data("post-id");
+          const communityId = $(this).data("community-id");
+          $.ajax("/user/deleteCommunityPost", {
+            type: "POST",
+            data: { pid: postId, cid: communityId },
+            success: function (result) {
+              if (result.status == false) {
+                alert(result.message);
+              } else {
+                location.reload();
+              }
+            },
+          });
+        }
       });
     });
     function changeAdmin() {

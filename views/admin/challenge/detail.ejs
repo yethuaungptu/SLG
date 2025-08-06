@@ -158,6 +158,9 @@
                       href="/admin/challenges/update/<%= challenge._id %>"
                       >Update</a
                     >
+                    <button class="btn btn-primary" onclick="sentAlert()">
+                      Send Alert
+                    </button>
                   </div>
                 </div>
               </div>
@@ -208,6 +211,28 @@
             location.href = "/admin/challenges";
           } else {
             alert("Error deleting tip");
+          }
+        },
+        error: function () {
+          alert("Error connecting to the server.");
+        },
+      });
+    }
+    function sentAlert() {
+      if (!confirm("Are you sure you want to send alert?")) {
+        return;
+      }
+      $.ajax({
+        url: "/admin/challenges/sendMailChallenge",
+        type: "POST",
+        data: {
+          challengeId: "<%= challenge._id %>",
+        },
+        success: function (response) {
+          if (response.status) {
+            alert("Alert sent successfully.");
+          } else {
+            alert("Error sending alert.");
           }
         },
         error: function () {

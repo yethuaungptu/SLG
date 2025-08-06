@@ -8,14 +8,6 @@ var Tip = require("../models/Tip");
 var User = require("../models/User");
 const upload = multer({ dest: "public/images/uploads" });
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "sustainablelivingguide.2025@gmail.com", // Your email
-    pass: "orhq pbuw uhow yrvu", // Your email password or app-specific password
-  },
-});
-
 router.get("/", async function (req, res) {
   var query = { isDeleted: false };
   var filterValue = "";
@@ -23,7 +15,7 @@ router.get("/", async function (req, res) {
     filterValue = req.query.search;
     query = { category: filterValue, isDeleted: false };
   }
-  const tips = await Tip.find(query).sort({ createdAt: -1 });
+  const tips = await Tip.find(query).sort({ created: -1 });
   res.render("admin/tip/index", { tips: tips, filterValue: filterValue });
 });
 
@@ -138,15 +130,8 @@ router.post("/sendMailTip", async function (req, res) {
       from: "sustainablelivingguide.2025@gmail.com",
       to: mailList.join(","),
       subject: "Alert Message from Sustainable Living Guide",
-      html: "<p>Hello life saver, you can check following link to check</p>",
+      html: `<div><p>Hello life saver, please visit again our website. There are many new content you will also like. For example </p> <a href='https://www.slg.onrender.com/tips/${req.body.tipId}'>Tip Details</a></div>`,
     };
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) {
-    //     res.json({ status: false });
-    //     return console.log("Error:", error);
-    //   }
-    //   console.log("Email sent:", info.response);
-    // });
     let resp = await sendMail(mailOptions);
     res.json({ status: true, message: "Mail Sent successfully" });
   } catch (e) {

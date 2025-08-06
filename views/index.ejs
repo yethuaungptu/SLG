@@ -1,189 +1,152 @@
 <!DOCTYPE html>
-<html data-theme="mytheme">
+<html lang="en" data-theme="mytheme">
   <head>
-    <title>Sustainable Living Guide</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="/stylesheets/aos.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sustainable Living Guide</title>
+    <link href="/stylesheets/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/stylesheets/aos.css" />
   </head>
-  <body>
+  <body class="bg-white text-gray-800 aos-all">
     <% include ./partial/navbar.ejs %>
-    <div class="carousel w-full h-[50vh] lg:h-[80vh]">
-      <div id="slide1" class="carousel-item relative w-full">
-        <img src="/images/slider-1.jpg" class="w-full object-cover" />
-        <div
-          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
-        >
-          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
-            Protect Our Planet
-          </h2>
-          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
-            Join our mission to create a sustainable and eco-friendly future.
-          </p>
-          <a href="/tips" class="btn btn-primary">Get Sustainable Tips</a>
-        </div>
-        <div
-          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-        >
-          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
-            >❮</a
-          >
-          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
-            >❯</a
-          >
-        </div>
-      </div>
 
-      <!-- Repeat for other slides with different text -->
-      <div id="slide2" class="carousel-item relative w-full">
-        <img src="/images/slider-2.jpg" class="w-full object-cover" />
-        <div
-          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
-        >
-          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
-            Clean Energy for All
-          </h2>
-          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
-            Supporting solar and wind solutions worldwide.
-          </p>
-          <a href="/challenges" class="btn btn-primary"
-            >Explore Eco Challenges</a
-          >
-        </div>
-        <div
-          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-        >
-          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
-            >❮</a
-          >
-          <a href="#slide3" class="btn btn-circle btn-outline btn btn-primary"
-            >❯</a
-          >
-        </div>
-      </div>
-      <div id="slide3" class="carousel-item relative w-full">
-        <img src="/images/slider-3.jpg" class="w-full object-cover" />
-        <div
-          class="absolute top-1/2 left-5 lg:left-16 -translate-y-1/2 text-white space-y-4"
-        >
-          <h2 class="text-3xl lg:text-5xl font-bold drop-shadow-md">
-            Recycle and Reuse
-          </h2>
-          <p class="text-sm lg:text-lg max-w-md drop-shadow-md">
-            Supporting recycling initiatives to reduce waste.
-          </p>
-          <a href="/blogs" class="btn btn-primary">Check Our Blogs</a>
-        </div>
-        <div
-          class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-        >
-          <a href="#slide2" class="btn btn-circle btn-outline btn btn-primary"
-            >❮</a
-          >
-          <a href="#slide1" class="btn btn-circle btn-outline btn btn-primary"
-            >❯</a
-          >
-        </div>
-      </div>
-    </div>
+    <!-- Hero Section with Full Glass Background -->
+    <section
+      class="relative bg-green-900 bg-cover bg-center py-20 px-4 aos-item"
+      data-id="1"
+      data-aos="fade-up"
+      style="background-image: url('/images/slider-1.jpg')"
+    >
+      <div class="absolute inset-0 bg-black/50"></div>
+      <!-- Optional dark overlay -->
 
-    <div class="aos-all w-full">
-      <br />
-      <br />
-      <br />
-      <div data-id="1" class="aos-item mt-5" data-aos="fade-up">
-        <div class="text-4xl font-bold text-center">Featured Tips</div>
-        <div class="row">
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
-          >
-            <% if (featuredTips.length === 0) { %>
-            <div class="text-center col-span-3 mt-3">
-              <p class="text-lg font-semibold">No featured tips available.</p>
+      <div class="relative max-w-7xl mx-auto">
+        <div
+          class="backdrop-blur-lg bg-white/10 rounded-xl shadow-2xl p-10 flex flex-col md:flex-row items-center gap-8 text-white"
+        >
+          <!-- Text Content -->
+          <div class="flex-1">
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+              Choose Eco friendly, Live Sustainably
+            </h1>
+            <p class="mb-6 text-lg">
+              Discover practical tips, inspiring stories, and actionable
+              challenges to help you reduce your environmental impact and make
+              sustainable living a part of your everyday life.
+            </p>
+            <div class="flex gap-4">
+              <a href="/challenges" class="btn btn-success">Start Challenge</a>
+              <a href="/tips" class="btn btn-outline text-white border-white">
+                Start Tip
+              </a>
             </div>
-            <%} %> <% for(var i = 0; i < featuredTips.length;i++){%>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <% if (featuredTips[i].image) { %>
-                <img
-                  src="<%= featuredTips[i].image %>"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-                <%} else{%>
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-                <%}%>
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title"><%= featuredTips[i].title %></h2>
-                <p><%= featuredTips[i].description %></p>
-                <div class="card-actions">
-                  <a
-                    class="btn btn-primary"
-                    href="/tips/<%= featuredTips[i]._id %>"
-                    >More Details</a
-                  >
-                </div>
-              </div>
-            </div>
-            <%}%>
+          </div>
+
+          <!-- Image -->
+          <div class="flex-1 hidden md:block">
+            <img
+              src="/images/index-1.jpg"
+              alt="Plant in soil"
+              class="rounded-lg w-full shadow-lg"
+            />
           </div>
         </div>
       </div>
-      <br />
-      <br />
-      <br />
-      <div data-id="2" class="aos-item my-5" data-aos="fade-up">
-        <div class="text-4xl font-bold text-center">Featured Challenges</div>
-        <div class="row">
+    </section>
+    <section data-id="2" data-aos="fade-up" class="py-20 px-6 aos-item">
+      <div class="max-w-6xl mx-auto text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
+          Featured Tips
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <% if (featuredTips.length === 0) { %>
+        <div class="text-center col-span-3 mt-3">
+          <p class="text-lg font-semibold">No featured tips available.</p>
+        </div>
+        <%} %> <% for(var i = 0; i < featuredTips.length;i++){%>
+        <div class="relative bg-transparent">
+          <% if (featuredTips[i].image) { %>
+          <img
+            src="<%= featuredTips[i].image %>"
+            alt="Garden Design"
+            class="w-full h-128 object-cover rounded-xl shadow-lg"
+          />
+          <%}else{%>
+          <img
+            src="/images/slider-1.jpg"
+            alt="Garden Design"
+            class="w-full h-128 object-cover rounded-xl shadow-lg"
+          />
+          <%}%>
           <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 align-items-stretch justify-items-center"
+            class="absolute bottom-[20px] left-1/2 transform -translate-x-1/2 w-11/12 bg-white/40 backdrop-blur-md rounded-xl p-5 shadow-lg"
           >
-            <% if (featuredChallenges.length === 0) { %>
-            <div class="text-center col-span-3 mt-3">
-              <p class="text-lg font-semibold">
-                No featured challenge available.
-              </p>
+            <h3 class="text-xl font-bold text-green-700 mb-1 text-center">
+              <%= featuredTips[i].title %>
+            </h3>
+            <p class="text-gray-800 text-sm text-center line-clamp-3">
+              <%= featuredTips[i].description %>
+            </p>
+            <div class="card-actions mt-2">
+              <a
+                class="btn btn-primary btn-sm mx-auto"
+                href="/tips/<%= featuredTips[i]._id %>"
+                >More Details</a
+              >
             </div>
-            <%} %> <% for(var i = 0; i < featuredChallenges.length;i++){%>
-            <div class="card bg-base-100 w-96 shadow-sm">
-              <figure class="px-10 pt-10">
-                <% if (featuredChallenges[i].image) { %>
-                <img
-                  src="<%= featuredChallenges[i].image %>"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-                <%} else{%>
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                  alt="Shoes"
-                  class="rounded-xl"
-                />
-                <%}%>
-              </figure>
-              <div class="card-body items-center text-center">
-                <h2 class="card-title"><%= featuredChallenges[i].name %></h2>
-                <p><%= featuredChallenges[i].description %></p>
-                <div class="card-actions">
-                  <a
-                    class="btn btn-primary"
-                    href="/challenges/<%= featuredChallenges[i]._id %>"
-                    >More Details</a
-                  >
-                </div>
-              </div>
-            </div>
-            <%}%>
           </div>
         </div>
+        <%}%>
       </div>
-    </div>
+    </section>
+    <section data-id="3" data-aos="fade-up" class="py-20 px-6 aos-item">
+      <div class="max-w-6xl mx-auto text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-green-800">
+          Featured Challenge
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <% if (featuredChallenges.length === 0) { %>
+        <div class="text-center col-span-3 mt-3">
+          <p class="text-lg font-semibold">No featured tips available.</p>
+        </div>
+        <%} %> <% for(var i = 0; i < featuredChallenges.length;i++){%>
+        <div class="relative bg-transparent">
+          <% if (featuredChallenges[i].image) { %>
+          <img
+            src="<%= featuredChallenges[i].image %>"
+            alt="Garden Design"
+            class="w-full h-128 object-cover rounded-xl shadow-lg"
+          />
+          <%}else{%>
+          <img
+            src="/images/slider-1.jpg"
+            alt="Garden Design"
+            class="w-full h-128 object-cover rounded-xl shadow-lg"
+          />
+          <%}%>
+          <div
+            class="absolute bottom-[20px] left-1/2 transform -translate-x-1/2 w-11/12 bg-white/40 backdrop-blur-md rounded-xl p-5 shadow-lg"
+          >
+            <h3 class="text-xl font-bold text-green-700 mb-1 text-center">
+              <%= featuredChallenges[i].name %>
+            </h3>
+            <p class="text-gray-800 text-sm text-center line-clamp-3">
+              <%= featuredChallenges[i].description %>
+            </p>
+            <div class="card-actions mt-2">
+              <a
+                class="btn btn-primary btn-sm mx-auto"
+                href="/challenges/<%= featuredChallenges[i]._id %>"
+                >More Details</a
+              >
+            </div>
+          </div>
+        </div>
+        <%}%>
+      </div>
+    </section>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>

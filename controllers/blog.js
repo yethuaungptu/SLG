@@ -13,7 +13,7 @@ router.get("/", async function (req, res) {
     filterValue = req.query.search;
     query = { category: filterValue, isDeleted: false };
   }
-  const blogs = await Blog.find(query).sort({ createdAt: -1 });
+  const blogs = await Blog.find(query).sort({ created: -1 });
   res.render("admin/blog/index", { blogs: blogs, filterValue: filterValue });
 });
 
