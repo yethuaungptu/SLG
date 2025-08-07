@@ -16,7 +16,7 @@
         </h1>
         <form id="ecoForm" class="space-y-5">
           <div class="form-control">
-            <label class="label font-medium">Electricity Usage (kWh)</label>
+            <label class="label font-bold">Electricity Usage (kWh)</label>
             <input
               id="electricity"
               type="number"
@@ -26,7 +26,7 @@
           </div>
 
           <div class="form-control">
-            <label class="label font-medium">Travel With Machine (km)</label>
+            <label class="label font-bold">Travel With Machine (km)</label>
             <input
               id="carKm"
               type="number"
@@ -36,7 +36,7 @@
           </div>
 
           <div class="form-control">
-            <label class="label font-medium">Diet Type</label>
+            <label class="label font-bold">Diet Type</label>
             <select id="diet" class="select select-bordered w-full">
               <option value="2.5">Meat-heavy</option>
               <option value="1.8">Mixed</option>
@@ -46,14 +46,22 @@
           </div>
 
           <div class="form-control">
-            <label class="label font-medium">View Footprint By:</label>
+            <label class="label font-bold">View Footprint By:</label>
             <select id="period" class="select select-bordered w-full">
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly" selected>Monthly</option>
             </select>
           </div>
-
+          <div class="flex flex-1">
+            <button
+              type="button"
+              class="btn btn-primary btn-block"
+              onclick="calculateFootprint()"
+            >
+              Calculate
+            </button>
+          </div>
           <div class="mt-6 bg-green-50 p-4 rounded-xl shadow-inner text-center">
             <h2 class="text-xl font-semibold text-green-700">
               Estimated CO₂ Footprint:
@@ -115,12 +123,12 @@
       }
     }
 
-    [electricityInput, carKmInput, dietInput, periodSelect].forEach((input) => {
-      input.addEventListener("input", calculateFootprint);
-      input.addEventListener("change", calculateFootprint);
-    });
+    // [electricityInput, carKmInput, dietInput, periodSelect].forEach((input) => {
+    //   input.addEventListener("input", calculateFootprint);
+    //   input.addEventListener("change", calculateFootprint);
+    // });
 
-    // Initial calculation
-    calculateFootprint();
+    // // Initial calculation
+    // calculateFootprint();
   </script>
 </html>
