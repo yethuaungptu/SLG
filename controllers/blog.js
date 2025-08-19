@@ -74,9 +74,9 @@ router.post("/update", upload.single("image"), async function (req, res) {
       updated: moment.utc(Date.now()).tz("Asia/Yangon").format(),
     };
     if (req.file) {
+      update.image = "/images/uploads/" + req.file.filename;
       try {
         fs.unlinkSync("public" + blogData.image);
-        update.image = "/images/uploads/" + req.file.filename;
       } catch (e) {
         console.log("Image error");
       }

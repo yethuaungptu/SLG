@@ -28,16 +28,34 @@
         tabindex="0"
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
-        <li><a href="/">Home</a></li>
-        <li><a href="/tips">Sustainable Tips</a></li>
-        <li><a href="/challenges">Eco Challenges</a></li>
-        <!-- <li><a href="/calculator">Eco Calculator</a></li> -->
-        <li><a href="/blogs">Blog</a></li>
-        <li><a href="/community">Community</a></li>
-        <li><a href="/aboutus">About Us</a></li>
+        <li><a href="/"><%= __('nav.home') %></a></li>
+        <!-- <li><a href="/tips"><%= __('nav.tips') %></a></li> -->
+        <li>
+          <details>
+            <summary><%= __('nav.tips') %></summary>
+            <ul class="p-2">
+              <li><a href="/tips?category=Energy">Energy</a></li>
+              <li><a href="/tips?category=Waste">Waste</a></li>
+              <li><a href="/tips?category=Water">Water</a></li>
+              <li><a href="/tips?category=Food">Food</a></li>
+              <li><a href="/tips?category=Transport">Transport</a></li>
+              <li><a href="/tips?category=Eco-Friendly">Eco-Friendly</a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href="/challenges"><%= __('nav.ecoChallenges') %></a></li>
+        <li><a href="/calculator"><%= __('nav.calculator') %>r</a></li>
+        <li><a href="/blogs"><%= __('nav.blogs') %></a></li>
+        <li><a href="/community"><%= __('nav.community') %></a></li>
+        <li><a href="/aboutus"><%= __('nav.about') %></a></li>
         <% if(locals.user){%>
-        <li><a href="/user">User Panel</a></li>
+        <li><a href="/user"><%= __('nav.userPanel') %></a></li>
         <%}%>
+        <li>
+          <a href="<%= locals.lang == 'en'? '/?lang=mm':'/?lang=en' %>">
+            <%= __('nav.lang') %>
+          </a>
+        </li>
       </ul>
       <a class="btn btn-ghost btn-primary text-xl hidden lg:flex">
         <div class="avatar avatar-placeholder">
@@ -51,26 +69,43 @@
   </div>
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
-      <li><a href="/">Home</a></li>
-      <li><a href="/tips">Sustainable Tips</a></li>
-      <li><a href="/challenges">Eco Challenges</a></li>
-      <!-- <li><a href="/calculator">Eco Calculator</a></li> -->
-      <li><a href="/blogs">Blog</a></li>
-      <li><a href="/community">Community</a></li>
-      <li><a href="/aboutus">About Us</a></li>
+      <li><a href="/"><%= __('nav.home') %></a></li>
+      <li>
+        <details>
+          <summary><%= __('nav.tips') %></summary>
+          <ul class="p-2 z-9999 w-52">
+            <li><a href="/tips?category=Energy">Energy</a></li>
+            <li><a href="/tips?category=Waste">Waste</a></li>
+            <li><a href="/tips?category=Water">Water</a></li>
+            <li><a href="/tips?category=Food">Food</a></li>
+            <li><a href="/tips?category=Transport">Transport</a></li>
+            <li><a href="/tips?category=Eco-Friendly">Eco-Friendly</a></li>
+          </ul>
+        </details>
+      </li>
+      <li><a href="/challenges"><%= __('nav.ecoChallenges') %></a></li>
+      <li><a href="/calculator"><%= __('nav.calculator') %></a></li>
+      <li><a href="/blogs"><%= __('nav.blogs') %></a></li>
+      <li><a href="/community"><%= __('nav.community') %></a></li>
+      <li><a href="/aboutus"><%= __('nav.about') %></a></li>
       <% if(locals.user){%>
-      <li><a href="/user">User Panel</a></li>
+      <li><a href="/user"><%= __('nav.userPanel') %></a></li>
       <%}%>
+      <li>
+        <a href="<%= locals.lang == 'en'? '/?lang=mm':'/?lang=en' %>">
+          <%= __('nav.lang') %>
+        </a>
+      </li>
     </ul>
   </div>
   <div class="navbar-end">
     <% if(locals.user){%>
     <a href="/user/logout" class="btn btn-outline btn-ghost btn-primary">
-      Logout
+      <%= __('nav.logout') %>
     </a>
     <%}else{%>
     <a href="/login" class="btn btn-outline btn-ghost btn-primary">
-      Login / Register
+      <%= __('nav.account') %>
     </a>
     <%}%>
   </div>

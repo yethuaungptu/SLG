@@ -44,6 +44,7 @@ router.get("/", checkUser, async function (req, res, next) {
     likeCount: likeCount,
     joinedCommunities: joinedCommunities,
     postCount: postCount,
+    __: res.__,
   });
 });
 
@@ -98,7 +99,7 @@ router.get("/bookmarkedTip", checkUser, async function (req, res, next) {
   const bookmarkList = req.session.user.bookmarkList.map((item) => item.id);
   console.log(bookmarkList);
   const tips = await Tip.find({ _id: { $in: bookmarkList } });
-  res.render("user/bookmarkedTip", { tips: tips });
+  res.render("user/bookmarkedTip", { tips: tips, __: res.__ });
 });
 
 router.post("/joinChallenge", checkUser, async (req, res) => {
@@ -135,7 +136,7 @@ router.get("/joinedChallenge", checkUser, async function (req, res) {
   const challengeList = req.session.user.challengeList.map((item) => item.id);
   console.log(challengeList);
   const challenges = await Challenge.find({ _id: { $in: challengeList } });
-  res.render("user/joinedChallenge", { challenges: challenges });
+  res.render("user/joinedChallenge", { challenges: challenges, __: res.__ });
 });
 
 router.get("/challenge/:id", checkUser, async function (req, res) {
@@ -164,6 +165,7 @@ router.get("/challenge/:id", checkUser, async function (req, res) {
     challenge: challenge,
     isCompletedToday: isCompletedToday,
     myCompletedDay: myCompletedDay,
+    __: res.__,
   });
 });
 
@@ -285,7 +287,7 @@ router.post("/giveCommentForBlog", checkUser, async (req, res) => {
 });
 
 router.get("/community/create", checkUser, async (req, res) => {
-  res.render("user/createCommunity");
+  res.render("user/createCommunity", { __: res.__ });
 });
 
 router.post(
@@ -351,7 +353,7 @@ router.get("/myCommunity", checkUser, async function (req, res) {
   const communities = await Community.find({
     "members.userId": req.session.user.id,
   });
-  res.render("user/myCommunity", { communities: communities });
+  res.render("user/myCommunity", { communities: communities, __: res.__ });
 });
 
 router.get("/community/edit/:id", checkUser, async function (req, res) {
@@ -362,7 +364,7 @@ router.get("/community/edit/:id", checkUser, async function (req, res) {
   if (!community.createdBy === req.session.user.id) {
     return res.redirect("/user/myCommunity");
   }
-  res.render("user/editCommunity", { community: community });
+  res.render("user/editCommunity", { community: community, __: res.__ });
 });
 
 router.post(
@@ -391,9 +393,9 @@ router.post(
         updated: moment.utc(Date.now()).tz("Asia/Yangon").format(),
       };
       if (req.file) {
+        updateData.image = "/images/uploads/" + req.file.filename;
         try {
           fs.unlinkSync("public" + community.image);
-          updateData.image = "/images/uploads/" + req.file.filename;
         } catch (e) {
           console.log("Image error");
         }
@@ -435,6 +437,7 @@ router.get("/community/:id", checkUser, async function (req, res) {
     community: community,
     isAdmin: isAdmin,
     posts: posts,
+    __: res.__,
   });
 });
 

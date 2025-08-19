@@ -58,7 +58,9 @@
           >
             <input type="radio" name="tip-info" />
             <div class="collapse-title font-semibold">Description</div>
-            <div class="collapse-content text-sm"><%= tip.description %></div>
+            <div class="collapse-content text-sm font-semibold">
+              <%= tip.description %>
+            </div>
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <% if (tip.steps.length > 0) { %>

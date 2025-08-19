@@ -4,131 +4,1157 @@
     <title>Sustainable Living Guide</title>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/aos.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
     <% include ./partial/navbar.ejs %>
-    <div class="flex items-center justify-center min-h-screen bg-green-200">
-      <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-8">
-        <h1 class="text-3xl font-bold text-center text-green-700 mb-6">
-          🌱 Eco Footprint Calculator
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+      <div class="text-center mb-8">
+        <h1
+          class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4"
+        >
+          <i class="fas fa-brain mr-4"></i>Sustainability Predictions
         </h1>
-        <form id="ecoForm" class="space-y-5">
-          <div class="form-control">
-            <label class="label font-bold">Electricity Usage (kWh)</label>
-            <input
-              id="electricity"
-              type="number"
-              placeholder="e.g. 400"
-              class="input input-bordered w-full"
-            />
+        <p class="text-lg text-base-content/70 max-w-3xl mx-auto">
+          Upload lifestyle data for advanced mining analysis and get
+          personalized sustainability predictions
+        </p>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl mb-8">
+        <div
+          class="card-header bg-gradient-to-r from-primary to-secondary text-white p-6 rounded-t-2xl"
+        >
+          <h2 class="card-title text-2xl">
+            <i class="fas fa-cloud-upload-alt mr-3 text-primary-content"> </i>
+            Dataset Upload & Mining Analysis
+          </h2>
+        </div>
+        <div class="card-body p-6">
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <form
+                id="uploadForm"
+                enctype="multipart/form-data"
+                class="space-y-4"
+              >
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-semibold text-lg mb-2">
+                      Upload New Dataset
+                    </span>
+                  </label>
+                  <input
+                    type="file"
+                    id="fileInput"
+                    name="dataset"
+                    accept=".csv"
+                    class="file-input file-input-bordered file-input-primary w-full file-input-lg"
+                    required
+                  />
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                  <button type="submit" class="btn btn-primary btn-lg flex-1">
+                    <i class="fas fa-upload mr-2"></i>Upload & Analyze
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-accent btn-lg"
+                    onclick="downloadSample()"
+                  >
+                    <i class="fas fa-download mr-2"></i>Sample
+                  </button>
+                </div>
+              </form>
+              <div id="uploadProgress" class="hidden space-y-3">
+                <progress
+                  class="progress progress-primary w-full"
+                  value="0"
+                  max="100"
+                ></progress>
+                <p class="text-sm text-center" id="uploadStatus">
+                  Processing...
+                </p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold text-lg mb-2">
+                    Load Existing Dataset
+                  </span>
+                </label>
+                <select
+                  id="datasetSelect"
+                  class="select select-bordered select-primary select-lg w-full"
+                >
+                  <option disabled selected>Choose stored dataset...</option>
+                  <% if (storedDatasets && storedDatasets.length > 0) { %> <%
+                  storedDatasets.forEach(dataset => { %>
+                  <option value="<%= dataset.filename %>">
+                    <%= dataset.filename %> (<%= (dataset.size /
+                    1024).toFixed(1) %>KB)
+                  </option>
+                  <% }); %> <% } %>
+                </select>
+              </div>
+              <button
+                onclick="loadStoredDataset()"
+                class="btn btn-secondary btn-lg w-full"
+              >
+                <i class="fas fa-database mr-2"></i>Load Dataset
+              </button>
+              <div
+                class="alert <%= datasetLoaded ? 'alert-success' : 'alert-info' %>"
+              >
+                <i
+                  class="fas fa-<%= datasetLoaded ? 'check-circle' : 'info-circle' %>"
+                ></i>
+                <div>
+                  <h4 class="font-bold">
+                    <%= datasetLoaded ? 'Dataset Active!' : 'No Dataset Loaded'
+                    %>
+                  </h4>
+                  <div class="text-xs">
+                    <% if(datasetLoaded){%>
+                    <span>Ready for predictions</span>
+                    <%}else{%>
+                    <span>Upload or select a dataset</span>
+                    <%}%>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="form-control">
-            <label class="label font-bold">Travel With Machine (km)</label>
-            <input
-              id="carKm"
-              type="number"
-              placeholder="e.g. 150"
-              class="input input-bordered w-full"
-            />
+          <!-- Mining Results -->
+          <% if (miningResults && Object.keys(miningResults).length > 0) { %>
+          <div class="divider divider-primary text-lg font-semibold">
+            Mining Insights
+          </div>
+          <div class="grid md:grid-cols-4 gap-4">
+            <div class="stat bg-primary/80 rounded-xl border border-primary/20">
+              <div class="stat-figure text-primary-content">
+                <i class="fas fa-users text-3xl"></i>
+              </div>
+              <div class="stat-title text-primary-content">Records</div>
+              <div class="stat-value text-primary-content text-2xl">
+                <%= miningResults.summary?.totalRecords || 0 %>
+              </div>
+            </div>
+            <div class="stat bg-success/80 rounded-xl border border-success/20">
+              <div class="stat-figure text-success-content">
+                <i class="fas fa-search text-3xl"></i>
+              </div>
+              <div class="stat-title text-success-content">Patterns</div>
+              <div class="stat-value text-success-content text-2xl">
+                <%= (miningResults.patterns?.highRatingProfiles?.length || 0) +
+                (miningResults.patterns?.lowRatingProfiles?.length || 0) %>
+              </div>
+            </div>
+            <div class="stat bg-warning/80 rounded-xl border border-warning/20">
+              <div class="stat-figure text-warning-content">
+                <i class="fas fa-exclamation-triangle text-3xl"></i>
+              </div>
+              <div class="stat-title text-warning-content">Anomalies</div>
+              <div class="stat-value text-warning-content text-2xl">
+                <%= (miningResults.anomalies || []).length %>
+              </div>
+            </div>
+            <div class="stat bg-info/80 rounded-xl border border-info/20">
+              <div class="stat-figure text-info-content">
+                <i class="fas fa-layer-group text-3xl"></i>
+              </div>
+              <div class="stat-title text-info-content">Clusters</div>
+              <div class="stat-value text-info-content text-2xl">
+                <%= Object.keys(miningResults.clusters || {}).length %>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-xl mb-8">
+        <div
+          class="card-header bg-gradient-to-r from-secondary to-accent text-white p-6 rounded-t-2xl"
+        >
+          <h2 class="card-title text-2xl">
+            <i class="fas fa-magic mr-3"></i>Lifestyle Sustainability Prediction
+          </h2>
+        </div>
+        <div class="card-body p-6">
+          <form id="predictionForm" class="space-y-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold">Age</span>
+                </label>
+                <br />
+                <input
+                  type="number"
+                  name="Age"
+                  class="input input-bordered input-primary"
+                  min="18"
+                  max="100"
+                  placeholder="Enter age"
+                  required
+                />
+              </div>
+
+              <!-- Location -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Location Type</span
+                  ></label
+                >
+                <select
+                  name="Location"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose location</option>
+                  <option value="Urban">🏙️ Urban</option>
+                  <option value="Suburban">🏘️ Suburban</option>
+                  <option value="Rural">🌾 Rural</option>
+                </select>
+              </div>
+
+              <!-- Diet Type -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Diet Type</span
+                  ></label
+                >
+                <select
+                  name="DietType"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose diet</option>
+                  <option value="Mostly Plant-Based">
+                    🥬 Mostly Plant-Based
+                  </option>
+                  <option value="Vegetarian">🥕 Vegetarian</option>
+                  <option value="Balanced">⚖️ Balanced</option>
+                  <option value="Mostly Animal-Based">
+                    🥩 Mostly Animal-Based
+                  </option>
+                </select>
+              </div>
+
+              <!-- Local Food -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Local Food Frequency</span
+                  ></label
+                >
+                <select
+                  name="LocalFoodFrequency"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>How often?</option>
+                  <option value="Often">Often</option>
+                  <option value="Sometimes">Sometimes</option>
+                  <option value="Rarely">Rarely</option>
+                </select>
+              </div>
+
+              <!-- Transportation -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Primary Transportation</span
+                  ></label
+                >
+                <select
+                  name="TransportationMode"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose transport</option>
+                  <option value="Walk">🚶 Walk</option>
+                  <option value="Bike">🚲 Bike</option>
+                  <option value="Public Transit">🚌 Public Transit</option>
+                  <option value="Electric Car">⚡ Electric Car</option>
+                  <option value="Car">🚗 Car</option>
+                  <option value="Motorcycle">🏍️ Motorcycle</option>
+                </select>
+              </div>
+
+              <!-- Energy Source -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Home Energy Source</span
+                  ></label
+                >
+                <select
+                  name="EnergySource"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose energy</option>
+                  <option value="Renewable">♻️ Renewable</option>
+                  <option value="Mixed">⚡ Mixed</option>
+                  <option value="Non-Renewable">🔋 Non-Renewable</option>
+                </select>
+              </div>
+
+              <!-- Home Type -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Home Type</span
+                  ></label
+                >
+                <select
+                  name="HomeType"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose home type</option>
+                  <option value="Apartment">🏢 Apartment</option>
+                  <option value="House">🏠 House</option>
+                  <option value="Condo">🏘️ Condo</option>
+                </select>
+              </div>
+
+              <!-- Home Size -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Home Size (sq ft)</span
+                  ></label
+                >
+                <input
+                  type="number"
+                  name="HomeSize"
+                  class="input input-bordered input-primary"
+                  min="200"
+                  max="5000"
+                  placeholder="e.g., 1200"
+                  required
+                />
+              </div>
+
+              <!-- Clothing Frequency -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Clothing Purchase Frequency</span
+                  ></label
+                >
+                <select
+                  name="ClothingFrequency"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>How often?</option>
+                  <option value="Rarely">Rarely</option>
+                  <option value="Sometimes">Sometimes</option>
+                  <option value="Often">Often</option>
+                </select>
+              </div>
+
+              <!-- Sustainable Brands -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Prefer Sustainable Brands</span
+                  ></label
+                >
+                <select
+                  name="SustainableBrands"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose preference</option>
+                  <option value="true">✅ Yes</option>
+                  <option value="false">❌ No</option>
+                </select>
+              </div>
+
+              <!-- Environmental Awareness -->
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold"
+                    >Environmental Awareness</span
+                  >
+                  <span class="label-text-alt" id="awarenessValue"
+                    >Level 3</span
+                  >
+                </label>
+                <input
+                  type="range"
+                  name="EnvironmentalAwareness"
+                  class="range range-primary"
+                  min="1"
+                  max="5"
+                  value="3"
+                  step="1"
+                  required
+                  id="awarenessRange"
+                />
+                <div class="flex justify-between text-xs px-2 mt-1 lg:me-16">
+                  <span>Low</span><span>Fair</span><span>Good</span
+                  ><span>High</span><span>Expert</span>
+                </div>
+              </div>
+
+              <!-- Community Involvement -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Community Involvement</span
+                  ></label
+                >
+                <select
+                  name="CommunityInvolvement"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose level</option>
+                  <option value="High">🌟 High</option>
+                  <option value="Moderate">⭐ Moderate</option>
+                  <option value="Low">💫 Low</option>
+                </select>
+              </div>
+
+              <!-- Monthly Electricity -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Monthly Electricity (kWh)</span
+                  ></label
+                >
+                <input
+                  type="number"
+                  name="MonthlyElectricityConsumption"
+                  class="input input-bordered input-primary"
+                  min="50"
+                  max="1000"
+                  placeholder="e.g., 250"
+                  required
+                />
+              </div>
+
+              <!-- Monthly Water -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Monthly Water (gallons)</span
+                  ></label
+                >
+                <input
+                  type="number"
+                  name="MonthlyWaterConsumption"
+                  class="input input-bordered input-primary"
+                  min="500"
+                  max="10000"
+                  placeholder="e.g., 3000"
+                  required
+                />
+              </div>
+
+              <!-- Gender -->
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-semibold">Gender</span>
+                </label>
+                <br />
+                <select
+                  name="Gender"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose gender</option>
+                  <option value="Male">♂️ Male</option>
+                  <option value="Female">♀️ Female</option>
+                  <option value="Other">⚧️ Other</option>
+                </select>
+              </div>
+
+              <!-- Plastic Products -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Plastic Product Usage</span
+                  ></label
+                >
+                <select
+                  name="UsingPlasticProducts"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>How often?</option>
+                  <option value="Rarely">Rarely</option>
+                  <option value="Sometimes">Sometimes</option>
+                  <option value="Often">Often</option>
+                </select>
+              </div>
+
+              <!-- Disposal Methods -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Waste Disposal Method</span
+                  ></label
+                >
+                <select
+                  name="DisposalMethods"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose method</option>
+                  <option value="Composting">🌱 Composting</option>
+                  <option value="Recycling">♻️ Recycling</option>
+                  <option value="Landfill">🗑️ Landfill</option>
+                </select>
+              </div>
+
+              <!-- Physical Activities -->
+              <div class="form-control">
+                <label class="label"
+                  ><span class="label-text font-semibold"
+                    >Physical Activity Level</span
+                  ></label
+                >
+                <select
+                  name="PhysicalActivities"
+                  class="select select-bordered select-primary"
+                  required
+                >
+                  <option disabled selected>Choose level</option>
+                  <option value="High">🏃 High</option>
+                  <option value="Moderate">🚶 Moderate</option>
+                  <option value="Low">🛋️ Low</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-4 justify-center mt-8">
+              <button type="submit" class="btn btn-primary btn-lg px-8">
+                <i class="fas fa-magic mr-2"></i>Predict Sustainability Score
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary btn-lg px-8"
+                onclick="fillSampleData()"
+              >
+                <i class="fas fa-flask mr-2"></i>Use Sample Data
+              </button>
+              <button type="reset" class="btn btn-outline btn-lg px-8">
+                <i class="fas fa-redo mr-2"></i>Reset Form
+              </button>
+            </div>
+          </form>
+
+          <!-- Loading -->
+          <div id="predictionLoading" class="hidden text-center py-12">
+            <span
+              class="loading loading-spinner loading-lg text-primary"
+            ></span>
+            <p class="mt-4 text-xl font-semibold">
+              🤖 Analyzing your lifestyle data...
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="predictionResults" class="card bg-base-100 shadow-xl hidden">
+        <div
+          class="card-header bg-gradient-to-r from-success to-info text-white p-6 rounded-t-2xl"
+        >
+          <h2 class="card-title text-2xl text-info-content">
+            <i class="fas fa-star mr-3"></i>Your Sustainability Prediction
+          </h2>
+        </div>
+        <div class="card-body p-6">
+          <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Score Display -->
+            <div class="lg:col-span-1">
+              <div
+                class="text-center p-8 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border border-primary/20"
+              >
+                <div
+                  class="text-6xl font-bold text-primary mb-3"
+                  id="scoreValue"
+                >
+                  4.2
+                </div>
+                <div class="text-xl font-semibold text-base-content/80 mb-4">
+                  out of 5.0
+                </div>
+                <div class="mb-6">
+                  <div
+                    class="radial-progress text-primary border-4 border-primary/20"
+                    style="--value: 84; --size: 8rem; --thickness: 6px"
+                    id="scoreProgress"
+                  >
+                    <span class="text-2xl font-bold">84%</span>
+                  </div>
+                </div>
+                <div class="">
+                  <div
+                    class="badge badge-success badge-lg my-2"
+                    id="confidenceBadge"
+                  >
+                    85% Confidence
+                  </div>
+                  <div
+                    class="badge badge-primary badge-lg my-2"
+                    id="categoryBadge"
+                  >
+                    Excellent
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Insights & Recommendations -->
+            <div class="lg:col-span-2 space-y-6">
+              <!-- Interpretation -->
+              <div class="card bg-success/5 border border-success/20">
+                <div class="card-body">
+                  <h3 class="card-title text-yellow-500 text-lg">
+                    <i class="fas fa-lightbulb mr-2"></i>Score Interpretation
+                  </h3>
+                  <p id="scoreInterpretation" class="text-base-content/90"></p>
+                </div>
+              </div>
+
+              <!-- AI Insights -->
+              <div class="card bg-info/5 border border-info/20">
+                <div class="card-body">
+                  <h3 class="card-title text-secondary text-lg">
+                    <i class="fas fa-robot mr-2"></i>AI-Powered Insights
+                  </h3>
+                  <ul
+                    id="aiInsights"
+                    class="list-disc list-inside space-y-2 text-base-content/90"
+                  ></ul>
+                </div>
+              </div>
+
+              <!-- Recommendations -->
+              <div class="card bg-warning/5 border border-warning/20">
+                <div class="card-body">
+                  <h3 class="card-title text-green-500 text-lg">
+                    <i class="fas fa-arrow-up mr-2"></i>Personalized
+                    Recommendations
+                  </h3>
+                  <ul
+                    id="recommendations"
+                    class="list-disc list-inside space-y-2 text-base-content/90"
+                  ></ul>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="form-control">
-            <label class="label font-bold">Diet Type</label>
-            <select id="diet" class="select select-bordered w-full">
-              <option value="2.5">Meat-heavy</option>
-              <option value="1.8">Mixed</option>
-              <option value="1.2">Vegetarian</option>
-              <option value="0.9">Vegan</option>
-            </select>
-          </div>
-
-          <div class="form-control">
-            <label class="label font-bold">View Footprint By:</label>
-            <select id="period" class="select select-bordered w-full">
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly" selected>Monthly</option>
-            </select>
-          </div>
-          <div class="flex flex-1">
-            <button
-              type="button"
-              class="btn btn-primary btn-block"
-              onclick="calculateFootprint()"
-            >
-              Calculate
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-4 justify-center mt-8">
+            <button class="btn btn-primary btn-lg" onclick="resetPrediction()">
+              <i class="fas fa-redo mr-2"></i>Make Another Prediction
             </button>
+            <!-- <button class="btn btn-secondary btn-lg" onclick="savePrediction()">
+              <i class="fas fa-save mr-2"></i>Save Result
+            </button>
+            <button class="btn btn-accent btn-lg" onclick="sharePrediction()">
+              <i class="fas fa-share mr-2"></i>Share Result
+            </button> -->
           </div>
-          <div class="mt-6 bg-green-50 p-4 rounded-xl shadow-inner text-center">
-            <h2 class="text-xl font-semibold text-green-700">
-              Estimated CO₂ Footprint:
-            </h2>
-            <p id="result" class="text-3xl font-bold text-gray-800 mt-2">
-              0.00 kg/month
-            </p>
-            <p id="warning" class="text-red-600 font-semibold mt-2 hidden">
-              ⚠️ High footprint! Reducing your impact.Max 5kg par day
-            </p>
-          </div>
-        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast toast-top toast-end z-50">
+      <div id="successToast" class="alert alert-success hidden">
+        <i class="fas fa-check-circle"></i>
+        <span id="successMessage">Success!</span>
+      </div>
+      <div id="errorToast" class="alert alert-error hidden">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="errorMessage">Error occurred!</span>
+      </div>
+      <div id="infoToast" class="alert alert-info hidden">
+        <i class="fas fa-info-circle"></i>
+        <span id="infoMessage">Information</span>
       </div>
     </div>
     <% include ./partial/footer.ejs %>
   </body>
-  <script src="/javascripts/aos.js"></script>
   <script>
-    AOS.init({ mirror: true });
+    const awarenessRange = document.getElementById("awarenessRange");
+    const awarenessValue = document.getElementById("awarenessValue");
+    if (awarenessRange && awarenessValue) {
+      awarenessRange.addEventListener("input", function () {
+        const value = this.value;
+        const labels = ["Low", "Fair", "Good", "High", "Expert"];
+        awarenessValue.textContent = `Level ${value} (${labels[value - 1]})`;
+      });
+    }
 
-    const electricityInput = document.getElementById("electricity");
-    const carKmInput = document.getElementById("carKm");
-    const dietInput = document.getElementById("diet");
-    const periodSelect = document.getElementById("period");
-    const resultDisplay = document.getElementById("result");
-    const warningDisplay = document.getElementById("warning");
+    // File upload handling
+    const uploadForm = document.getElementById("uploadForm");
+    if (uploadForm) {
+      uploadForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("fileInput");
+        const file = fileInput ? fileInput.files[0] : null;
 
-    function calculateFootprint() {
-      const electricity = parseFloat(electricityInput.value) || 0;
-      const carKm = parseFloat(carKmInput.value) || 0;
-      const dietFactor = parseFloat(dietInput.value) || 0;
-      const period = periodSelect.value;
+        if (!file) {
+          showToast("error", "Please select a CSV file");
+          return;
+        }
+        if (!file.name.toLowerCase().endsWith(".csv")) {
+          showToast("error", "Please select a valid CSV file");
+          return;
+        }
 
-      // Monthly CO₂ estimates
-      const electricityCO2 = electricity * 0.5; // kg CO2 per kWh
-      const carCO2 = carKm * 0.21 * 4; // weekly to monthly
-      const dietCO2 = dietFactor * 30; // monthly
+        const formData = new FormData();
+        formData.append("dataset", file);
+        showUploadProgress(true);
 
-      const monthlyTotal = electricityCO2 + carCO2 + dietCO2;
+        try {
+          const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const result = await response.json();
 
-      let displayTotal = monthlyTotal;
-      let label = "kg/month";
+          if (result.success) {
+            showToast("success", result.message);
+            setTimeout(() => location.reload(), 2000);
+          } else {
+            throw new Error(result.error || "Upload failed");
+          }
+        } catch (error) {
+          showToast("error", "Upload failed: " + error.message);
+        } finally {
+          showUploadProgress(false);
+        }
+      });
+    }
 
-      if (period === "daily") {
-        displayTotal = monthlyTotal / 30;
-        label = "kg/day";
-      } else if (period === "weekly") {
-        displayTotal = monthlyTotal / 4;
-        label = "kg/week";
+    // Load stored dataset
+    async function loadStoredDataset() {
+      const select = document.getElementById("datasetSelect");
+      const filename = select ? select.value : "";
+
+      if (!filename) {
+        showToast("error", "Please select a dataset");
+        return;
       }
 
-      resultDisplay.textContent = `${displayTotal.toFixed(2)} ${label}`;
+      try {
+        const response = await fetch("/load-dataset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename }),
+        });
+        const result = await response.json();
 
-      // Show warning if over 5kg/day
-      if (period === "daily" && displayTotal > 5) {
-        warningDisplay.classList.remove("hidden");
-      } else {
-        warningDisplay.classList.add("hidden");
+        if (result.success) {
+          showToast("success", result.message);
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          throw new Error(result.error || "Failed to load dataset");
+        }
+      } catch (error) {
+        showToast("error", "Failed to load dataset: " + error.message);
       }
     }
 
-    // [electricityInput, carKmInput, dietInput, periodSelect].forEach((input) => {
-    //   input.addEventListener("input", calculateFootprint);
-    //   input.addEventListener("change", calculateFootprint);
-    // });
+    // Prediction form handling
+    const predictionForm = document.getElementById("predictionForm");
+    if (predictionForm) {
+      predictionForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-    // // Initial calculation
-    // calculateFootprint();
+        const loadingEl = document.getElementById("predictionLoading");
+        const resultsEl = document.getElementById("predictionResults");
+
+        if (loadingEl) loadingEl.classList.remove("hidden");
+        if (resultsEl) resultsEl.classList.add("hidden");
+
+        try {
+          const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          const result = await response.json();
+          displayPredictionResult(result);
+        } catch (error) {
+          showToast("error", "Prediction failed: " + error.message);
+        } finally {
+          if (loadingEl) loadingEl.classList.add("hidden");
+        }
+      });
+    }
+
+    // Display prediction results
+    function displayPredictionResult(result) {
+      const scoreValue = document.getElementById("scoreValue");
+      const scoreProgress = document.getElementById("scoreProgress");
+      const confidenceBadge = document.getElementById("confidenceBadge");
+      const categoryBadge = document.getElementById("categoryBadge");
+      const scoreInterpretation = document.getElementById(
+        "scoreInterpretation"
+      );
+      const insightsContainer = document.getElementById("aiInsights");
+      const recContainer = document.getElementById("recommendations");
+      const resultsEl = document.getElementById("predictionResults");
+
+      if (scoreValue) scoreValue.textContent = result.prediction.toFixed(1);
+
+      if (scoreProgress) {
+        const percentage = Math.round((result.prediction / 5) * 100);
+        scoreProgress.style.setProperty("--value", percentage);
+        const progressSpan = scoreProgress.querySelector("span");
+        if (progressSpan) progressSpan.textContent = percentage + "%";
+      }
+
+      if (confidenceBadge) {
+        confidenceBadge.textContent =
+          Math.round(result.confidence * 100) + "% Confidence";
+      }
+
+      // Update category badge
+      let category = "";
+      let categoryClass = "";
+      if (result.prediction >= 4.5) {
+        category = "Outstanding";
+        categoryClass = "badge-success";
+      } else if (result.prediction >= 3.5) {
+        category = "Excellent";
+        categoryClass = "badge-success";
+      } else if (result.prediction >= 2.5) {
+        category = "Good";
+        categoryClass = "badge-warning";
+      } else {
+        category = "Needs Work";
+        categoryClass = "badge-error";
+      }
+
+      if (categoryBadge) {
+        categoryBadge.textContent = category;
+        categoryBadge.className = `badge badge-lg ${categoryClass}`;
+      }
+
+      // Update interpretation
+      let interpretation = "";
+      if (result.prediction >= 4.5) {
+        interpretation =
+          "🌟 Outstanding sustainability lifestyle! You demonstrate exceptional environmental consciousness and sustainable practices across all areas.";
+      } else if (result.prediction >= 3.5) {
+        interpretation =
+          "🌱 Excellent sustainability practices! You're making positive environmental choices with room for some minor improvements.";
+      } else if (result.prediction >= 2.5) {
+        interpretation =
+          "⚖️ Good sustainability foundation. You have solid practices to build on - several targeted improvements could significantly boost your environmental impact.";
+      } else {
+        interpretation =
+          "🌿 There's significant room for improvement in your sustainability practices. Consider adopting more environmentally friendly lifestyle choices.";
+      }
+
+      if (scoreInterpretation) {
+        scoreInterpretation.innerHTML = interpretation;
+      }
+
+      // Update AI insights
+      if (insightsContainer) {
+        insightsContainer.innerHTML = "";
+        if (result.insights && result.insights.length > 0) {
+          result.insights.forEach((insight) => {
+            const li = document.createElement("li");
+            li.innerHTML = `🤖 ${insight}`;
+            insightsContainer.appendChild(li);
+          });
+        } else {
+          insightsContainer.innerHTML =
+            "<li>🧠 AI analysis complete - recommendations based on your input data</li>";
+        }
+      }
+
+      // Generate recommendations
+      const recommendations = generateRecommendations(
+        result.input,
+        result.prediction
+      );
+      if (recContainer) {
+        recContainer.innerHTML = "";
+        recommendations.forEach((rec) => {
+          const li = document.createElement("li");
+          li.innerHTML = rec;
+          recContainer.appendChild(li);
+        });
+      }
+
+      // Show results
+      if (resultsEl) {
+        resultsEl.classList.remove("hidden");
+        resultsEl.scrollIntoView({ behavior: "smooth" });
+      }
+
+      showToast("success", "AI prediction completed successfully! 🎉");
+    }
+
+    // Generate personalized recommendations
+    function generateRecommendations(input, score) {
+      const recommendations = [];
+
+      if (input.DietType === "Mostly Animal-Based") {
+        recommendations.push(
+          "🥬 Consider adopting a more plant-based diet to reduce environmental impact"
+        );
+      }
+      if (input.TransportationMode === "Car") {
+        recommendations.push(
+          "🚲 Try using public transport, cycling, or walking for shorter trips"
+        );
+      }
+      if (input.EnergySource === "Non-Renewable") {
+        recommendations.push(
+          "⚡ Switch to renewable energy sources like solar or wind power"
+        );
+      }
+      if (parseInt(input.MonthlyElectricityConsumption || 0) > 300) {
+        recommendations.push(
+          "💡 Reduce electricity consumption with energy-efficient appliances"
+        );
+      }
+      if (parseInt(input.MonthlyWaterConsumption || 0) > 3500) {
+        recommendations.push(
+          "💧 Implement water-saving measures like low-flow fixtures"
+        );
+      }
+      if (input.DisposalMethods === "Landfill") {
+        recommendations.push(
+          "♻️ Start composting organic waste and increase recycling efforts"
+        );
+      }
+      if (input.UsingPlasticProducts === "Often") {
+        recommendations.push(
+          "🌱 Reduce single-use plastic consumption and choose reusable alternatives"
+        );
+      }
+      if (parseInt(input.EnvironmentalAwareness || 0) < 4) {
+        recommendations.push(
+          "📚 Increase environmental awareness through education and community involvement"
+        );
+      }
+
+      if (recommendations.length === 0) {
+        recommendations.push(
+          "🏆 Continue your excellent sustainability practices!"
+        );
+        recommendations.push(
+          "👥 Consider sharing your knowledge to help others improve their environmental impact"
+        );
+      }
+
+      return recommendations.slice(0, 6);
+    }
+
+    // Fill sample data
+    function fillSampleData() {
+      const sampleData = {
+        Age: 35,
+        Location: "Urban",
+        DietType: "Mostly Plant-Based",
+        LocalFoodFrequency: "Often",
+        TransportationMode: "Bike",
+        EnergySource: "Renewable",
+        HomeType: "Apartment",
+        HomeSize: 800,
+        ClothingFrequency: "Rarely",
+        SustainableBrands: "true",
+        EnvironmentalAwareness: 5,
+        CommunityInvolvement: "High",
+        MonthlyElectricityConsumption: 150,
+        MonthlyWaterConsumption: 2000,
+        Gender: "Female",
+        UsingPlasticProducts: "Rarely",
+        DisposalMethods: "Composting",
+        PhysicalActivities: "High",
+      };
+
+      Object.keys(sampleData).forEach((key) => {
+        const element = document.querySelector(`[name="${key}"]`);
+        if (element) {
+          element.value = sampleData[key];
+          if (element.type === "range") {
+            element.dispatchEvent(new Event("input"));
+          }
+        }
+      });
+
+      showToast("info", "Sample eco-friendly lifestyle data loaded! 🌱");
+    }
+
+    // Download sample CSV
+    function downloadSample() {
+      const sampleData = `ParticipantID,Age,Location,DietType,LocalFoodFrequency,TransportationMode,EnergySource,HomeType,HomeSize,ClothingFrequency,SustainableBrands,EnvironmentalAwareness,CommunityInvolvement,MonthlyElectricityConsumption,MonthlyWaterConsumption,Gender,UsingPlasticProducts,DisposalMethods,PhysicalActivities,Rating
+1,35,Urban,Mostly Plant-Based,Often,Bike,Renewable,Apartment,800,Rarely,True,5,High,100,1500,Female,Rarely,Composting,High,5
+2,28,Suburban,Balanced,Sometimes,Public Transit,Mixed,House,1500,Sometimes,True,4,Moderate,250,3000,Male,Sometimes,Recycling,Moderate,4
+3,65,Rural,Mostly Animal-Based,Rarely,Car,Non-Renewable,House,2500,Often,False,2,Low,400,4500,Male,Often,Landfill,Low,1`;
+
+      const blob = new Blob([sampleData], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sample_lifestyle_sustainability_data.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      showToast("success", "Sample CSV downloaded! 📄");
+    }
+
+    // Utility functions
+    function showUploadProgress(show) {
+      const progressElement = document.getElementById("uploadProgress");
+      const statusElement = document.getElementById("uploadStatus");
+
+      if (!progressElement || !statusElement) return;
+
+      if (show) {
+        progressElement.classList.remove("hidden");
+        statusElement.textContent = "Uploading and analyzing...";
+
+        const progress = progressElement.querySelector("progress");
+        if (progress) {
+          let value = 0;
+          const interval = setInterval(() => {
+            value += Math.random() * 15;
+            if (value > 90) value = 90;
+            progress.value = value;
+
+            if (value > 20)
+              statusElement.textContent = "📊 Processing CSV data...";
+            if (value > 50)
+              statusElement.textContent = "🔍 Performing data mining...";
+            if (value > 75)
+              statusElement.textContent = "🧠 Generating AI insights...";
+          }, 200);
+
+          progressElement.dataset.intervalId = interval;
+        }
+      } else {
+        progressElement.classList.add("hidden");
+        const intervalId = progressElement.dataset.intervalId;
+        if (intervalId) {
+          clearInterval(parseInt(intervalId));
+        }
+      }
+    }
+
+    function showToast(type, message) {
+      const toastId = type + "Toast";
+      const messageId = type + "Message";
+
+      const toast = document.getElementById(toastId);
+      const messageElement = document.getElementById(messageId);
+
+      if (toast && messageElement) {
+        messageElement.textContent = message;
+        toast.classList.remove("hidden");
+
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 5000);
+      }
+    }
+
+    function resetPrediction() {
+      const form = document.getElementById("predictionForm");
+      const results = document.getElementById("predictionResults");
+      const awarenessValue = document.getElementById("awarenessValue");
+
+      if (form) form.reset();
+      if (results) results.classList.add("hidden");
+      if (awarenessValue) awarenessValue.textContent = "Level 3";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function savePrediction() {
+      showToast("success", "Prediction saved to your history! 💾");
+    }
+
+    function sharePrediction() {
+      if (navigator.share) {
+        navigator
+          .share({
+            title: "My Sustainability Score",
+            text: "Check out my AI sustainability prediction from EcoPredict!",
+            url: window.location.href,
+          })
+          .catch(() => {
+            fallbackShare();
+          });
+      } else {
+        fallbackShare();
+      }
+    }
+
+    function fallbackShare() {
+      if (navigator.clipboard) {
+        navigator.clipboard
+          .writeText(window.location.href)
+          .then(() => {
+            showToast("success", "Link copied to clipboard! 📋");
+          })
+          .catch(() => {
+            showToast("info", "Please copy the URL manually to share");
+          });
+      } else {
+        showToast("info", "Please copy the URL manually to share");
+      }
+    }
+
+    // Initialize page
+    document.addEventListener("DOMContentLoaded", function () {
+      const cards = document.querySelectorAll(".card");
+      cards.forEach((card, index) => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(20px)";
+
+        setTimeout(() => {
+          card.style.transition = "all 0.6s ease";
+          card.style.opacity = "1";
+          card.style.transform = "translateY(0)";
+        }, index * 150);
+      });
+
+      showToast("info", "Ready for data upload and AI predictions! 🚀");
+    });
+
+    // Make functions available globally
+    window.loadStoredDataset = loadStoredDataset;
+    window.fillSampleData = fillSampleData;
+    window.downloadSample = downloadSample;
+    window.resetPrediction = resetPrediction;
+    window.savePrediction = savePrediction;
+    window.sharePrediction = sharePrediction;
   </script>
 </html>

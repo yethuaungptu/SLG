@@ -22,7 +22,7 @@
           <input type="hidden" name="id" value="<%= community._id %>" />
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Name -->
-            <div class="form-control">
+            <div class="form-control col-span-full">
               <label class="label font-semibold">Community Name</label>
               <input
                 type="text"
@@ -34,14 +34,14 @@
             </div>
 
             <!-- Status -->
-            <div class="form-control">
+            <!-- <div class="form-control">
               <label class="label font-semibold">Status</label>
               <select name="status" class="select select-bordered w-full">
                 <option value="active" <%= community.status == "active" ? "selected":"" %>>Active</option>
                 <option value="inactive" <%= community.status == "inactive" ? "selected":"" %>>Inactive</option>
                 <option value="archived" <%= community.status == "archived" ? "selected":"" %>>Archived</option>
               </select>
-            </div>
+            </div> -->
 
             <!-- Description -->
             <div class="form-control md:col-span-2">
@@ -50,7 +50,9 @@
                 name="description"
                 class="textarea textarea-bordered w-full"
                 rows="3"
-              ><%= community.description %></textarea>
+              >
+<%= community.description %></textarea
+              >
             </div>
 
             <!-- Image Upload -->
@@ -68,12 +70,8 @@
             <div class="form-control my-auto">
               <label class="cursor-pointer label">
                 <span class="label-text font-semibold">Public Community?</span>
-                <input
-                  type="checkbox"
-                  name="isPublic"
-                  class="toggle toggle-primary"
-                  <%= community.isPublic ? "checked" : "" %>
-                />
+                <input type="checkbox" name="isPublic" class="toggle
+                toggle-primary" <%= community.isPublic ? "checked" : "" %> />
               </label>
             </div>
 

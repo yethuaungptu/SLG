@@ -5,12 +5,23 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var session = require("express-session");
 var mongoose = require("mongoose");
+const i18n = require("i18n");
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 var adminRouter = require("./routes/admin");
 
 var app = express();
+
+i18n.configure({
+  locales: ["en", "mm"],
+  directory: path.join(__dirname, "locales"),
+  defaultLocale: "mm",
+  queryParameter: "lang",
+  autoReload: true,
+  syncFiles: false,
+  objectNotation: true,
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -22,15 +33,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// mongoose.connect("mongodb://127.0.0.1/slgdb");
-// const db = mongoose.connection;
-// db.on("error", console.error.bind("mongodb connection error at slgdb"));
-
-mongoose.connect(
-  "mongodb+srv://slg:slg2025@slg.59yvemi.mongodb.net/?retryWrites=true&w=majority&appName=slg"
-);
+mongoose.connect("mongodb://127.0.0.1/slgdb");
 const db = mongoose.connection;
 db.on("error", console.error.bind("mongodb connection error at slgdb"));
+
+// mongoose.connect(
+//   "mongodb+srv://slg:slg2025@slg.59yvemi.mongodb.net/?retryWrites=true&w=majority&appName=slg"
+// );
+// const db = mongoose.connection;
+// db.on("error", console.error.bind("mongodb connection error at slgdb"));
 
 app.use(
   session({
@@ -40,7 +51,16 @@ app.use(
   })
 );
 
+app.use(i18n.init);
+
 app.use(function (req, res, next) {
+  if (req.query.lang) {
+    req.setLocale(req.query.lang);
+    req.session.locale = req.query.lang;
+  } else if (req.session.locale) {
+    req.setLocale(req.session.locale);
+  }
+  res.locals.lang = req.getLocale();
   res.locals.user = req.session.user;
   res.locals.admin = req.session.admin;
   next();

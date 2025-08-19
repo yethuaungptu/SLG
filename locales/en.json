@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "home": "Home",
+    "tips": "Tips",
+    "ecoChallenges": "Eco Challenges",
+    "blogs": "Blogs",
+    "about": "About Us",
+    "community": "Community",
+    "calculator": "Sustainability Predictions",
+    "account": "Login/Register",
+    "logout": "Logout",
+    "lang": "မြန်မာ",
+    "userPanel": "User Panel",
+    "bookmarkedTips": "Bookmarked Tips",
+    "joinedChallenges": "Joined Challenges",
+    "profile": "Profile",
+    "myCommunity": "My Community"
+  },
+  "featured": "Featured",
+  "title": "Sustainable Living Guide"
+}
