@@ -16,6 +16,14 @@
     "profile": "Profile",
     "myCommunity": "My Community"
   },
+  "tipList": {
+    "energy": "Energy",
+    "waste": "Waste",
+    "water": "Water",
+    "food": "Food",
+    "transport": "Transport",
+    "ecoFriendly": "Eco-Friendly"
+  },
   "featured": "Featured",
   "title": "Sustainable Living Guide"
 }

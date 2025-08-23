@@ -70,7 +70,7 @@
 
               <!-- Blog Content -->
               <div class="prose max-w-none">
-                <p><%= blog.content %></p>
+                <p id="content"></p>
               </div>
 
               <!-- Optional Comments -->
@@ -113,6 +113,10 @@
   </body>
   <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
+    $(function () {
+      const contentVal = `<div><%- blog.content %></div>`;
+      $("#content").html(contentVal);
+    });
     function deleteTip() {
       if (!confirm("Are you sure you want to delete this tip?")) {
         return;

@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/stylesheets/quill.snow.css" rel="stylesheet" />
+
+    <!-- Quill JS -->
+    <script src="/javascripts/quill.js"></script>
   </head>
   <body>
     <div id="root">
@@ -129,19 +133,17 @@
                           Content
                         </span>
                       </label>
-                      <textarea
-                        name="content"
-                        class="textarea textarea-bordered w-full validator"
-                        required
-                        minlength="15"
-                      ></textarea>
+                      <div id="editor"></div>
+                      <!-- Hidden input for form submission -->
+                      <input type="hidden" name="content" id="content" />
+
                       <p class="validator-hint">
                         Must be at least 15 characters
                       </p>
                     </div>
                   </div>
 
-                  <div class="mt-16">
+                  <div class="mt-32">
                     <button type="submit" class="btn btn-primary float-right">
                       Add
                     </button>
@@ -156,4 +158,15 @@
       </div>
     </div>
   </body>
+  <script>
+    const quill = new Quill("#editor", {
+      theme: "snow",
+    });
+    const form = document.querySelector("form");
+    const content = document.getElementById("content");
+
+    form.addEventListener("submit", function (e) {
+      content.value = quill.root.innerHTML;
+    });
+  </script>
 </html>

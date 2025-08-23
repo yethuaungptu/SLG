@@ -590,17 +590,17 @@
                 class="text-center p-8 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 rounded-2xl border border-primary/20"
               >
                 <div
-                  class="text-6xl font-bold text-primary mb-3"
+                  class="text-6xl font-bold text-green-500 mb-3"
                   id="scoreValue"
                 >
                   4.2
                 </div>
-                <div class="text-xl font-semibold text-base-content/80 mb-4">
+                <div class="text-xl font-semibold text-base-content mb-4">
                   out of 5.0
                 </div>
                 <div class="mb-6">
                   <div
-                    class="radial-progress text-primary border-4 border-primary/20"
+                    class="radial-progress text-green-500 border-4 border-primary/20"
                     style="--value: 84; --size: 8rem; --thickness: 6px"
                     id="scoreProgress"
                   >
@@ -670,10 +670,12 @@
             <button class="btn btn-primary btn-lg" onclick="resetPrediction()">
               <i class="fas fa-redo mr-2"></i>Make Another Prediction
             </button>
-            <!-- <button class="btn btn-secondary btn-lg" onclick="savePrediction()">
+            <% if(locals.user){%>
+            <button class="btn btn-secondary btn-lg" onclick="savePrediction()">
               <i class="fas fa-save mr-2"></i>Save Result
             </button>
-            <button class="btn btn-accent btn-lg" onclick="sharePrediction()">
+            <%}%>
+            <!--<button class="btn btn-accent btn-lg" onclick="sharePrediction()">
               <i class="fas fa-share mr-2"></i>Share Result
             </button> -->
           </div>
@@ -698,6 +700,7 @@
     </div>
     <% include ./partial/footer.ejs %>
   </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
     const awarenessRange = document.getElementById("awarenessRange");
     const awarenessValue = document.getElementById("awarenessValue");
@@ -1098,7 +1101,23 @@
     }
 
     function savePrediction() {
-      showToast("success", "Prediction saved to your history! 💾");
+      $.ajax({
+        url: "/user/saveCurrentRating",
+        type: "POST",
+        data: {
+          rating: $("#scoreValue").text(),
+        },
+        success: function (response) {
+          if (response.status === "success") {
+            showToast("success", "Prediction saved to your profile! 💾");
+          } else {
+            showToast("error", "Prediction save error");
+          }
+        },
+        error: function () {
+          showToast("error", "Error connecting to the server.");
+        },
+      });
     }
 
     function sharePrediction() {

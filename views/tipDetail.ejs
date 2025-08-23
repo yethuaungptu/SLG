@@ -48,8 +48,10 @@
             class="collapse collapse-arrow bg-base-100 border border-base-300"
           >
             <input type="radio" name="tip-info" checked="checked" />
-            <div class="collapse-title font-semibold">Estimated Savings</div>
-            <div class="collapse-content text-sm">
+            <div class="collapse-title font-semibold text-lg">
+              Estimated Savings
+            </div>
+            <div class="collapse-content text-lg">
               <%= tip.estimated_savings %>
             </div>
           </div>
@@ -57,10 +59,8 @@
             class="collapse collapse-arrow bg-base-100 border border-base-300"
           >
             <input type="radio" name="tip-info" />
-            <div class="collapse-title font-semibold">Description</div>
-            <div class="collapse-content text-sm font-semibold">
-              <%= tip.description %>
-            </div>
+            <div class="collapse-title font-semibold text-lg">Description</div>
+            <div class="collapse-content text-lg"><%= tip.description %></div>
           </div>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <% if (tip.steps.length > 0) { %>
@@ -70,12 +70,12 @@
               </li>
               <% for(var i = 0; i < tip.steps.length;i++){%>
               <li class="list-row">
-                <div class="text-4xl font-thin opacity-90 tabular-nums">
+                <div class="text-4xl opacity-90 tabular-nums">
                   <%= i+1 < 10 ? '0'+(i+1) : i+1 %>
                 </div>
-                <div class="list-col-grow">
+                <div class="list-col-grow text-lg">
                   <div>Step <%= tip.steps[i].number %></div>
-                  <div class="text-sm font-semibold opacity-60">
+                  <div class="font-semibold opacity-60">
                     <%= tip.steps[i].description %>
                   </div>
                 </div>
@@ -89,12 +89,12 @@
               </li>
               <% for(var i = 0; i < tip.daily_habits.length;i++){%>
               <li class="list-row">
-                <div class="text-4xl font-thin opacity-90 tabular-nums">
+                <div class="text-4xl opacity-90 tabular-nums">
                   <%= i+1 < 10 ? '0'+(i+1) : i+1 %>
                 </div>
-                <div class="list-col-grow">
+                <div class="list-col-grow text-lg">
                   <div><%= tip.daily_habits[i].title %></div>
-                  <div class="text-xs uppercase font-semibold opacity-60">
+                  <div class="uppercase font-semibold opacity-60">
                     <%= tip.daily_habits[i].frequency %>
                   </div>
                 </div>

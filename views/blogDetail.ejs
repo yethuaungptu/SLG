@@ -119,7 +119,7 @@
 
               <!-- Content -->
               <div class="prose max-w-none">
-                <p><%= blog.content %></p>
+                <p id="content"></p>
               </div>
             </div>
 
@@ -182,6 +182,10 @@
   <script src="/javascripts/aos.js"></script>
   <script src="/javascripts/jquery-3.7.1.min.js"></script>
   <script>
+    $(function () {
+      const contentVal = `<div><%- blog.content %></div>`;
+      $("#content").html(contentVal);
+    });
     AOS.init({
       mirror: true,
     });

@@ -639,6 +639,17 @@ router.post("/leaveCommunity", checkUser, async function (req, res) {
   }
 });
 
+router.post("/saveCurrentRating", checkUser, async function (req, res) {
+  try {
+    await User.findByIdAndUpdate(req.session.user.id, {
+      $set: { profile: req.body.rating },
+    });
+    res.json({ status: "success" });
+  } catch (e) {
+    res.json({ status: "error" });
+  }
+});
+
 router.get("/logout", checkUser, async function (req, res) {
   req.session.destroy();
   res.redirect("/");

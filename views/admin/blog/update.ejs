@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/stylesheets/quill.snow.css" rel="stylesheet"/>
+    <script src="/javascripts/quill.js"></script>
   </head>
   <body>
     <div id="root">
@@ -132,12 +134,9 @@
                           Content
                         </span>
                       </label>
-                      <textarea
-                        name="content"
-                        class="textarea textarea-bordered w-full validator"
-                        required
-                        minlength="15"
-                      ><%= blog.content %></textarea>
+                      <div id="editor"></div>
+                        <!-- Hidden input for form submission -->
+                        <input type="hidden" name="content" id="content" value="<%= blog.content %>"/>
                       <p class="validator-hint">
                         Must be at least 15 characters
                       </p>
@@ -159,4 +158,19 @@
       </div>
     </div>
   </body>
+  <script src="/javascripts/jquery-3.7.1.min.js"></script>
+  <script>
+    const quill = new Quill("#editor", {
+      theme: "snow",
+    });
+    const form = document.querySelector("form");
+    const content = document.getElementById("content");
+
+    form.addEventListener("submit", function (e) {
+      content.value = quill.root.innerHTML;
+    });
+    $(function(){
+        quill.root.innerHTML = $("#content").val();
+    })
+  </script>
 </html>

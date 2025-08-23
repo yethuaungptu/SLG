@@ -159,7 +159,9 @@
               </div>
               <div>
                 <p class="text-sm font-semibold"><%= posts[i].userId.name %></p>
-                <p class="text-xs text-gray-500">July 22, 2025</p>
+                <p class="text-xs text-gray-500">
+                  <%= posts[i].created.toLocaleDateString() %>
+                </p>
               </div>
             </div>
             <span class="text-sm text-gray-400 postId"
