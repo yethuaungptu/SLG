@@ -3765,6 +3765,9 @@
       background-color: color-mix(in oklab, var(--color-primary) 80%, transparent);
     }
   }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
   .bg-success\/5 {
     background-color: var(--color-success);
     @supports (color: color-mix(in lab, red, red)) {
@@ -3779,6 +3782,9 @@
   }
   .bg-transparent {
     background-color: transparent;
+  }
+  .bg-warning {
+    background-color: var(--color-warning);
   }
   .bg-warning\/5 {
     background-color: var(--color-warning);
