@@ -150,17 +150,18 @@ router.get("/challenge/:id", checkUser, async function (req, res) {
   let myCompletedDay = [];
   const challenge = await Challenge.findById(req.params.id);
   if (challenge.status != "not start") {
-    const res = challenge.participants.filter(
+    const result = challenge.participants.filter(
       (item) =>
         item.userId == req.session.user.id &&
         item.currentDay == challenge.currentDay
     );
-    if (res.length > 0) isCompletedToday = true;
+    if (result.length > 0) isCompletedToday = true;
     const completedDay = challenge.participants.filter(
       (item) => item.userId == req.session.user.id
     );
     if (completedDay.length > 0) myCompletedDay = completedDay[0].completedDays;
   }
+  console.log(isCompletedToday);
   res.render("user/challenge", {
     challenge: challenge,
     isCompletedToday: isCompletedToday,
@@ -181,6 +182,7 @@ router.post("/challengeTaskComplete", checkUser, async function (req, res) {
     const resData = challenge.participants.filter(
       (item) => item.userId == req.session.user.id
     );
+    console.log("//////", resData);
     if (resData.length == 0) {
       await Challenge.updateOne(
         { _id: cid, "participants.userId": { $ne: uid } },
@@ -195,30 +197,31 @@ router.post("/challengeTaskComplete", checkUser, async function (req, res) {
           },
         }
       );
+    } else {
+      await Challenge.updateOne(
+        {
+          _id: cid,
+          "dailyTasks.day": Number(req.body.currentDay),
+        },
+        {
+          $addToSet: {
+            "dailyTasks.$.completedBy": uid,
+          },
+          $set: {
+            "participants.$[elem].status": "in_progress",
+          },
+          $addToSet: {
+            "participants.$[elem].completedDays": Number(req.body.currentDay),
+          },
+          $inc: {
+            "participants.$[elem].currentDay": 1,
+          },
+        },
+        {
+          arrayFilters: [{ "elem.userId": uid }],
+        }
+      );
     }
-    await Challenge.updateOne(
-      {
-        _id: cid,
-        "dailyTasks.day": Number(req.body.currentDay),
-      },
-      {
-        $addToSet: {
-          "dailyTasks.$.completedBy": uid,
-        },
-        $set: {
-          "participants.$[elem].status": "in_progress",
-        },
-        $addToSet: {
-          "participants.$[elem].completedDays": Number(req.body.currentDay),
-        },
-        $inc: {
-          "participants.$[elem].currentDay": 1,
-        },
-      },
-      {
-        arrayFilters: [{ "elem.userId": uid }],
-      }
-    );
     const incrementPoint =
       challenge.dailyTasks.length > 0
         ? challenge.point / challenge.dailyTasks.length

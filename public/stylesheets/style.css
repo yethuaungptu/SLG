@@ -3300,6 +3300,21 @@
   .table {
     display: table;
   }
+  .modal-bottom {
+    place-items: end;
+    :where(.modal-box) {
+      height: auto;
+      width: 100%;
+      max-width: none;
+      max-height: calc(100vh - 5em);
+      translate: 0 100%;
+      scale: 1;
+      --modal-tl: var(--radius-box);
+      --modal-tr: var(--radius-box);
+      --modal-bl: 0;
+      --modal-br: 0;
+    }
+  }
   .size-6 {
     width: calc(var(--spacing) * 6);
     height: calc(var(--spacing) * 6);
@@ -3765,9 +3780,6 @@
       background-color: color-mix(in oklab, var(--color-primary) 80%, transparent);
     }
   }
-  .bg-secondary {
-    background-color: var(--color-secondary);
-  }
   .bg-success\/5 {
     background-color: var(--color-success);
     @supports (color: color-mix(in lab, red, red)) {
@@ -3942,6 +3954,9 @@
   }
   .px-10 {
     padding-inline: calc(var(--spacing) * 10);
+  }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4);
   }
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
@@ -4387,6 +4402,23 @@
   .toggle-primary {
     &:checked, &[aria-checked="true"] {
       --input-color: var(--color-primary);
+    }
+  }
+  .sm\:modal-middle {
+    @media (width >= 40rem) {
+      place-items: center;
+      :where(.modal-box) {
+        height: auto;
+        width: calc(11/12 * 100%);
+        max-width: 32rem;
+        max-height: calc(100vh - 5em);
+        translate: 0 2%;
+        scale: 98%;
+        --modal-tl: var(--radius-box);
+        --modal-tr: var(--radius-box);
+        --modal-bl: var(--radius-box);
+        --modal-br: var(--radius-box);
+      }
     }
   }
   .md\:col-span-1 {
