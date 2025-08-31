@@ -149,12 +149,14 @@ router.get("/challenge/:id", checkUser, async function (req, res) {
   let isCompletedToday = false;
   let myCompletedDay = [];
   const challenge = await Challenge.findById(req.params.id);
+  console.log("challenge ", challenge);
   if (challenge.status != "not start") {
     const result = challenge.participants.filter(
       (item) =>
         item.userId == req.session.user.id &&
         item.currentDay == challenge.currentDay
     );
+    console.log(result);
     if (result.length > 0) isCompletedToday = true;
     const completedDay = challenge.participants.filter(
       (item) => item.userId == req.session.user.id
@@ -197,31 +199,29 @@ router.post("/challengeTaskComplete", checkUser, async function (req, res) {
           },
         }
       );
-    } else {
-      await Challenge.updateOne(
-        {
-          _id: cid,
-          "dailyTasks.day": Number(req.body.currentDay),
-        },
-        {
-          $addToSet: {
-            "dailyTasks.$.completedBy": uid,
-          },
-          $set: {
-            "participants.$[elem].status": "in_progress",
-          },
-          $addToSet: {
-            "participants.$[elem].completedDays": Number(req.body.currentDay),
-          },
-          $inc: {
-            "participants.$[elem].currentDay": 1,
-          },
-        },
-        {
-          arrayFilters: [{ "elem.userId": uid }],
-        }
-      );
     }
+    await Challenge.updateOne(
+      {
+        _id: cid,
+        "dailyTasks.day": Number(req.body.currentDay),
+      },
+      {
+        $addToSet: {
+          "dailyTasks.$.completedBy": uid,
+        },
+        $set: {
+          "participants.$[elem].status": "in_progress",
+          "participants.$[elem].currentDay": Number(req.body.currentDay),
+        },
+        $addToSet: {
+          "participants.$[elem].completedDays": Number(req.body.currentDay),
+        },
+      },
+      {
+        arrayFilters: [{ "elem.userId": uid }],
+      }
+    );
+
     const incrementPoint =
       challenge.dailyTasks.length > 0
         ? challenge.point / challenge.dailyTasks.length
