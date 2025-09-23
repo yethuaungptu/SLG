@@ -25,7 +25,6 @@ const TipSchema = new Schema({
   },
   estimated_savings: {
     type: String,
-    required: true,
   },
   image: {
     type: String,

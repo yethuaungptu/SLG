@@ -38,6 +38,7 @@
         </div>
         <div class="card-body p-6">
           <div class="grid lg:grid-cols-2 gap-6">
+            <% if (!storedDatasets || storedDatasets.length == 0) { %>
             <div class="space-y-4">
               <form
                 id="uploadForm"
@@ -83,7 +84,7 @@
                 </p>
               </div>
             </div>
-
+            <%}%>
             <div class="space-y-4">
               <div class="form-control">
                 <label class="label">
@@ -93,9 +94,8 @@
                 </label>
                 <select
                   id="datasetSelect"
-                  class="select select-bordered select-primary select-lg w-full"
+                  class="select select-bordered select-primary select-lg w-full hidden"
                 >
-                  <option disabled selected>Choose stored dataset...</option>
                   <% if (storedDatasets && storedDatasets.length > 0) { %> <%
                   storedDatasets.forEach(dataset => { %>
                   <option value="<%= dataset.filename %>">
@@ -607,7 +607,7 @@
                     <span class="text-2xl font-bold">84%</span>
                   </div>
                 </div>
-                <div class="">
+                <div class="hidden">
                   <div
                     class="badge badge-success badge-lg my-2"
                     id="confidenceBadge"
@@ -640,7 +640,7 @@
               <div class="card bg-info/5 border border-info/20">
                 <div class="card-body">
                   <h3 class="card-title text-secondary text-lg">
-                    <i class="fas fa-robot mr-2"></i>AI-Powered Insights
+                    <i class="fas fa-robot mr-2"></i>Predictive Analytics
                   </h3>
                   <ul
                     id="aiInsights"
@@ -757,6 +757,7 @@
     // Load stored dataset
     async function loadStoredDataset() {
       const select = document.getElementById("datasetSelect");
+      select.selectedIndex = 0;
       const filename = select ? select.value : "";
 
       if (!filename) {
@@ -893,7 +894,7 @@
           });
         } else {
           insightsContainer.innerHTML =
-            "<li>🧠 AI analysis complete - recommendations based on your input data</li>";
+            "<li>🧠 Analysis complete - recommendations based on your input data</li>";
         }
       }
 
@@ -926,42 +927,42 @@
 
       if (input.DietType === "Mostly Animal-Based") {
         recommendations.push(
-          "🥬 Consider adopting a more plant-based diet to reduce environmental impact"
+          "🥬 Consider adopting a more plant-based diet to reduce environmental impact <a href='/tips?category=Food' class='btn btn-primary btn-sm'>Food Tips</a>"
         );
       }
       if (input.TransportationMode === "Car") {
         recommendations.push(
-          "🚲 Try using public transport, cycling, or walking for shorter trips"
+          "🚲 Try using public transport, cycling, or walking for shorter trips <a href='/tips?category=Transport' class='btn btn-primary btn-sm'>Transport Tips</a>"
         );
       }
       if (input.EnergySource === "Non-Renewable") {
         recommendations.push(
-          "⚡ Switch to renewable energy sources like solar or wind power"
+          "⚡ Switch to renewable energy sources like solar or wind power <a href='/tips?category=Energy' class='btn btn-primary btn-sm'>Energy Tips</a>"
         );
       }
       if (parseInt(input.MonthlyElectricityConsumption || 0) > 300) {
         recommendations.push(
-          "💡 Reduce electricity consumption with energy-efficient appliances"
+          "💡 Reduce electricity consumption with energy-efficient appliances <a href='/tips?category=Energy' class='btn btn-primary btn-sm'>Energy Tips</a>"
         );
       }
       if (parseInt(input.MonthlyWaterConsumption || 0) > 3500) {
         recommendations.push(
-          "💧 Implement water-saving measures like low-flow fixtures"
+          "💧 Implement water-saving measures like low-flow fixtures <a href='/tips?category=Water' class='btn btn-primary btn-sm'>Water Tips</a>"
         );
       }
       if (input.DisposalMethods === "Landfill") {
         recommendations.push(
-          "♻️ Start composting organic waste and increase recycling efforts"
+          "♻️ Start composting organic waste and increase recycling efforts <a href='/tips?category=Waste' class='btn btn-primary btn-sm'>Waste Tips</a>"
         );
       }
       if (input.UsingPlasticProducts === "Often") {
         recommendations.push(
-          "🌱 Reduce single-use plastic consumption and choose reusable alternatives"
+          "🌱 Reduce single-use plastic consumption and choose reusable alternatives <a href='/tips?category=Eco-Friendly' class='btn btn-primary btn-sm'>Eco-Friendly Tips</a>"
         );
       }
       if (parseInt(input.EnvironmentalAwareness || 0) < 4) {
         recommendations.push(
-          "📚 Increase environmental awareness through education and community involvement"
+          "📚 Increase environmental awareness through education and community involvement <a href='/tips?category=Eco-Friendly' class='btn btn-primary btn-sm'>Eco-Friendly Tips</a>"
         );
       }
 

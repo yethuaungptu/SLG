@@ -147,6 +147,29 @@
         <%}%>
       </div>
     </section>
+    <!-- Video Section -->
+    <section data-id="4" data-aos="fade-up" class="py-20 px-6 aos-item">
+      <div class="max-w-6xl mx-auto text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-green-800">
+          Explore Sustainable Living
+        </h2>
+        <p class="mt-3 text-gray-600">
+          Watch our quick video to see how small changes can make a big impact.
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl">
+        <video
+          class="w-full rounded-xl"
+          controls
+          preload="none"
+          poster="/images/video_poster.png"
+        >
+          <source src="/video/AI_Video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
     <% include ./partial/footer.ejs %>
   </body>
   <script src="/javascripts/aos.js"></script>
