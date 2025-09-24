@@ -191,7 +191,7 @@
                         Add Step
                       </button>
                     </div>
-                    <!-- <div class="form-control w-full undefined">
+                    <div class="form-control w-full undefined">
                       <label class="label">
                         <span class="label-text text-base-content undefined">
                           Daily Habits
@@ -206,7 +206,7 @@
                       >
                         Add Habit
                       </button>
-                    </div> -->
+                    </div>
                   </div>
                   <div class="mt-16">
                     <button type="submit" class="btn btn-primary float-right">
@@ -257,9 +257,6 @@
       habitDiv.innerHTML = `
       <label class="label">Title</label>
       <input type="text" name="habits[${habitCount}][title]" class="input input-bordered w-full mb-2" placeholder="Habit Title" required />
-
-      <label class="label">Frequency</label>
-      <input type="text" name="habits[${habitCount}][frequency]" class="input input-bordered w-full" placeholder="Habit Frequency" required />
 
       <button type="button" class="btn btn-error btn-sm mt-3" onclick="removeHabit(${habitCount})">Remove Habit</button>
     `;

@@ -62,7 +62,7 @@
             <div class="collapse-title font-semibold text-lg">Description</div>
             <div class="collapse-content text-lg"><%= tip.description %></div>
           </div>
-          <div class="grid grid-cols-1 gap-3">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <% if (tip.steps.length > 0) { %>
             <ul class="list bg-base-100 rounded-box shadow-md">
               <li class="p-4 pb-2 text-lg opacity-90 tracking-wide">
@@ -78,6 +78,25 @@
                   <div class="font-semibold opacity-60">
                     <%= tip.steps[i].description %>
                   </div>
+                </div>
+              </li>
+              <%}%>
+            </ul>
+            <%}%> <% if (tip.daily_habits.length > 0) { %>
+            <ul class="list bg-base-100 rounded-box shadow-md">
+              <li class="p-4 pb-2 text-lg opacity-90 tracking-wide">
+                Tip's daily habits
+              </li>
+              <% for(var i = 0; i < tip.daily_habits.length;i++){%>
+              <li class="list-row">
+                <div class="text-4xl opacity-90 tabular-nums">
+                  <%= i+1 < 10 ? '0'+(i+1) : i+1 %>
+                </div>
+                <div class="list-col-grow text-lg my-auto">
+                  <div><%= tip.daily_habits[i].title %></div>
+                  <!-- <div class="uppercase font-semibold opacity-60">
+                    <%= tip.daily_habits[i].frequency %>
+                  </div> -->
                 </div>
               </li>
               <%}%>

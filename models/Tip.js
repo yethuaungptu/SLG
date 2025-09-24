@@ -57,7 +57,6 @@ const TipSchema = new Schema({
       },
       frequency: {
         type: String,
-        required: true,
       },
     },
   ],

@@ -33,7 +33,7 @@ router.post("/create", upload.single("image"), async function (req, res) {
     tip.difficulty_level = req.body.difficulty_level;
     // tip.estimated_savings = req.body.estimated_savings;
     tip.steps = req.body.steps ? req.body.steps : [];
-    // tip.daily_habits = req.body.habits ? req.body.habits : [];
+    tip.daily_habits = req.body.habits ? req.body.habits : [];
     if (req.file) tip.image = "/images/uploads/" + req.file.filename;
     await tip.save();
     res.redirect("/admin/tips");
@@ -92,7 +92,7 @@ router.post("/update", upload.single("image"), async function (req, res) {
       difficulty_level: req.body.difficulty_level,
       // estimated_savings: req.body.estimated_savings,
       steps: req.body.steps ? req.body.steps : [],
-      // daily_habits: req.body.habits ? req.body.habits : [],
+      daily_habits: req.body.habits ? req.body.habits : [],
       updated: moment.utc(Date.now()).tz("Asia/Yangon").format(),
     };
     if (req.file) {
